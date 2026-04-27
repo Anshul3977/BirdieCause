@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>American Dream — Strategic Commercial Dossier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Editorial+New:ital,wght@0,400;1,400&family=Syne:wght@400;500;600;700;800&family=Syne+Mono&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+/* ─────────────────────────────────────────
+   TOKENS
+───────────────────────────────────────── */
+:root {
+  --void:     #07070A;
+  --deep:     #0D0D12;
+  --base:     #131318;
+  --raised:   #1A1A22;
+  --lift:     #22222C;
+  --wire:     rgba(255,255,255,0.06);
+  --wire-g:   rgba(201,165,60,0.16);
+  --gold:     #C9A53C;
+  --gold-hi:  #E8C96A;
+  --gold-lo:  #5C4A18;
+  --gold-dim: rgba(201,165,60,0.08);
+  --plat:     #D8D4C8;
+  --ash:      #8A8A96;
+  --fog:      #4A4A58;
+  --white:    #F2F0EC;
+  --signal:   #D4F050;   /* neon-yellow — used only for top-tier alerts */
+  --green:    #4CBA7A;
+}
+
+/* ─────────────────────────────────────────
+   RESET + BASE
+───────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  background: var(--void);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  cursor: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─────────────────────────────────────────
+   CURSOR
+───────────────────────────────────────── */
+#c-dot { position: fixed; width: 6px; height: 6px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: transform .08s; }
+#c-ring { position: fixed; width: 28px; height: 28px; border: 1px solid rgba(201,165,60,.35); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: all .12s ease; }
+body:has(button:hover) #c-ring,
+body:has(a:hover) #c-ring,
+body:has(.clickable:hover) #c-ring { transform: translate(-50%,-50%) scale(1.8); background: rgba(201,165,60,.06); border-color: var(--gold); }
+@media (pointer: coarse) { #c-dot, #c-ring { display: none; } body { cursor: auto; } }
+
+/* ─────────────────────────────────────────
+   SCROLL PROGRESS
+───────────────────────────────────────── */
+#prog { position: fixed; top: 0; left: 0; height: 1px; background: linear-gradient(90deg, var(--gold-lo), var(--gold), var(--gold-hi)); z-index: 1100; width: 0; pointer-events: none; }
+
+/* ─────────────────────────────────────────
+   STICKY STRIP
+───────────────────────────────────────── */
+#strip {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 800;
+  background: rgba(7,7,10,.96); backdrop-filter: blur(20px) saturate(180%);
+  border-top: 1px solid var(--wire-g);
+  padding: 12px 48px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  transform: translateY(100%); transition: transform .45s cubic-bezier(.16,1,.3,1);
+}
+#strip.show { transform: translateY(0); }
+.strip-left { display: flex; align-items: center; gap: 20px; }
+.strip-pulse { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; flex-shrink: 0; }
+@keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(76,186,122,.5)} 50%{box-shadow:0 0 0 8px rgba(76,186,122,0)} }
+.strip-msg { font-family: 'Syne', sans-serif; font-size: .72rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--ash); }
+.strip-msg strong { color: var(--white); }
+.strip-cta { background: var(--gold); color: var(--void); padding: 10px 26px; border: none; cursor: none; font-family: 'Syne', sans-serif; font-size: .68rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; text-decoration: none; display: inline-block; transition: background .2s; white-space: nowrap; flex-shrink: 0; }
+.strip-cta:hover { background: var(--gold-hi); }
+@media (max-width: 680px) { #strip { padding: 12px 20px; } .strip-msg { display: none; } }
+
+/* ─────────────────────────────────────────
+   NAV
+───────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+  padding: 24px 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: all .35s;
+}
+nav.inked { background: rgba(7,7,10,.95); backdrop-filter: blur(20px); padding: 14px 48px; border-bottom: 1px solid var(--wire); }
+.nav-brand { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; color: var(--white); text-decoration: none; }
+.nav-brand em { color: var(--gold); font-style: normal; }
+.nav-links { display: flex; gap: 28px; list-style: none; align-items: center; }
+.nav-links a { font-size: .65rem; letter-spacing: .18em; text-transform: uppercase; color: var(--ash); text-decoration: none; transition: color .2s; font-family: 'Syne', sans-serif; font-weight: 500; }
+.nav-links a:hover { color: var(--gold); }
+.nav-pill { background: var(--gold); color: var(--void) !important; padding: 9px 22px; font-weight: 700 !important; }
+.nav-pill:hover { background: var(--gold-hi) !important; }
+@media (max-width: 880px) { .nav-links { display: none; } nav { padding: 18px 24px; } nav.inked { padding: 12px 24px; } }
+
+/* ─────────────────────────────────────────
+   BUYER GATE — modal
+───────────────────────────────────────── */
+#gate {
+  position: fixed; inset: 0; z-index: 2000;
+  background: var(--void);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  transition: opacity .55s, visibility .55s;
+}
+#gate.gone { opacity: 0; visibility: hidden; pointer-events: none; }
+.gate-box { max-width: 820px; width: 100%; }
+.gate-label { font-family: 'Syne', sans-serif; font-size: .62rem; letter-spacing: .38em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 18px; }
+.gate-hed {
+  font-family: 'Syne', sans-serif; font-size: clamp(1.9rem, 4vw, 3.2rem); font-weight: 800;
+  line-height: 1.05; letter-spacing: -.02em; margin-bottom: 12px;
+}
+.gate-sub { font-size: .92rem; color: var(--ash); margin-bottom: 44px; line-height: 1.6; max-width: 540px; }
+.gate-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+.gate-card {
+  background: var(--raised); border: 1px solid var(--wire);
+  padding: 32px 24px; cursor: none; text-decoration: none;
+  display: block; transition: all .25s; position: relative; overflow: hidden;
+}
+.gate-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--gold); transform: scaleX(0); transform-origin: left; transition: transform .35s; }
+.gate-card:hover { background: var(--lift); border-color: var(--wire-g); transform: translateY(-4px); }
+.gate-card:hover::before { transform: scaleX(1); }
+.gc-icon { font-size: 1.8rem; margin-bottom: 16px; display: block; }
+.gc-title { font-family: 'Syne', sans-serif; font-size: .95rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px; color: var(--white); }
+.gc-sub { font-size: .75rem; color: var(--fog); line-height: 1.5; }
+.gc-arrow { position: absolute; bottom: 20px; right: 20px; color: var(--gold); font-size: .8rem; opacity: 0; transition: opacity .2s; }
+.gate-card:hover .gc-arrow { opacity: 1; }
+.gate-skip { display: block; margin-top: 24px; font-size: .72rem; color: var(--fog); background: none; border: none; cursor: none; text-decoration: underline; transition: color .2s; font-family: 'DM Sans', sans-serif; }
+.gate-skip:hover { color: var(--ash); }
+@media (max-width: 680px) { .gate-cards { grid-template-columns: 1fr; } }
+
+/* ─────────────────────────────────────────
+   SHARED LAYOUT
+───────────────────────────────────────── */
+section { padding: 120px 0; }
+.w { max-width: 1280px; margin: 0 auto; padding: 0 48px; }
+@media (max-width: 768px) { .w { padding: 0 20px; } section { padding: 80px 0; } }
+
+.tag { font-family: 'Syne', sans-serif; font-size: .58rem; letter-spacing: .38em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 14px; }
+.hed-xl { font-family: 'Syne', sans-serif; font-size: clamp(3rem, 7vw, 8rem); font-weight: 800; line-height: .9; letter-spacing: -.03em; }
+.hed-lg { font-family: 'Syne', sans-serif; font-size: clamp(2.4rem, 4.5vw, 5.2rem); font-weight: 800; line-height: .95; letter-spacing: -.025em; }
+.hed-md { font-family: 'Syne', sans-serif; font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 800; line-height: 1; letter-spacing: -.02em; }
+.hed-xl em, .hed-lg em, .hed-md em { color: var(--gold); font-style: italic; font-family: 'DM Sans', sans-serif; font-weight: 300; }
+.body { font-size: .94rem; line-height: 1.8; color: var(--ash); font-weight: 300; }
+.rule { width: 48px; height: 1px; background: var(--gold); margin: 20px 0; }
+
+/* Reveal */
+.r { opacity: 0; transform: translateY(28px); transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1); }
+.r.on { opacity: 1; transform: none; }
+.d1{transition-delay:.06s} .d2{transition-delay:.12s} .d3{transition-delay:.18s} .d4{transition-delay:.24s} .d5{transition-delay:.30s} .d6{transition-delay:.36s}
+
+/* Buttons */
+.btn { display: inline-block; padding: 13px 30px; font-family: 'Syne', sans-serif; font-size: .68rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; text-decoration: none; cursor: none; border: none; transition: all .2s; }
+.btn-gold { background: var(--gold); color: var(--void); }
+.btn-gold:hover { background: var(--gold-hi); transform: translateY(-2px); }
+.btn-ghost { background: transparent; color: var(--white); border: 1px solid rgba(255,255,255,.18); }
+.btn-ghost:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+
+/* Source note */
+.src { font-family: 'Syne Mono', monospace; font-size: .6rem; color: var(--fog); letter-spacing: .05em; display: inline; }
+.src::before { content: '['; } .src::after { content: ']'; }
+
+/* ─────────────────────────────────────────
+   §1 HERO
+───────────────────────────────────────── */
+#hero {
+  position: relative; min-height: 100svh;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+/* Video embed backdrop */
+.hero-vid-wrap {
+  position: absolute; inset: 0; overflow: hidden;
+}
+.hero-vid-wrap iframe {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% + 200px);
+  height: calc(100% + 200px);
+  pointer-events: none;
+  opacity: .22;
+}
+.hero-vid-wrap .vid-fallback {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 130% 90% at 70% 40%, #0E1828 0%, var(--void) 65%);
+}
+.hero-grain {
+  position: absolute; inset: 0; z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 200px; opacity: .6; pointer-events: none;
+}
+.hero-vignette { position: absolute; inset: 0; z-index: 2; background: radial-gradient(ellipse 80% 80% at 50% 50%, transparent 20%, rgba(7,7,10,.75) 100%); }
+.hero-bottom { position: absolute; bottom: 0; left: 0; right: 0; height: 240px; z-index: 3; background: linear-gradient(transparent, var(--void)); }
+/* Animated ticker tape */
+.hero-ticker {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 5;
+  overflow: hidden; height: 36px;
+  background: rgba(201,165,60,.06); border-bottom: 1px solid var(--wire-g);
+  display: flex; align-items: center;
+}
+.ticker-inner { display: flex; gap: 0; animation: tick 40s linear infinite; white-space: nowrap; }
+.ticker-item { font-family: 'Syne Mono', monospace; font-size: .6rem; letter-spacing: .15em; padding: 0 32px; color: var(--gold); opacity: .7; border-right: 1px solid var(--wire-g); flex-shrink: 0; }
+@keyframes tick { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+.hero-content { position: relative; z-index: 10; max-width: 1100px; padding: 0 48px; text-align: center; }
+@media (max-width: 768px) { .hero-content { padding: 0 20px; } }
+
+/* World Cup urgency pill */
+.urgency-pill {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: rgba(212,240,80,.08); border: 1px solid rgba(212,240,80,.22);
+  padding: 7px 18px; margin-bottom: 28px;
+  font-family: 'Syne', sans-serif; font-size: .62rem; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--signal);
+  opacity: 0; animation: fu .7s .3s forwards;
+}
+.urgency-pulse { width: 6px; height: 6px; background: var(--signal); border-radius: 50%; animation: pulse 1.8s infinite; }
+
+.hero-hed {
+  font-family: 'Syne', sans-serif; font-size: clamp(3.2rem, 8vw, 9.5rem); font-weight: 800;
+  line-height: .88; letter-spacing: -.035em; margin-bottom: 0;
+  opacity: 0; animation: fu .85s .5s forwards;
+}
+.hero-hed .gold-word { color: var(--gold); }
+.hero-hed .italic-line { font-family: 'DM Sans', sans-serif; font-weight: 300; font-style: italic; color: var(--plat); font-size: .65em; display: block; margin-top: 6px; }
+
+.hero-sub {
+  font-size: clamp(.88rem, 1.5vw, 1.05rem); color: var(--ash); line-height: 1.7; font-weight: 300;
+  max-width: 640px; margin: 28px auto 0;
+  opacity: 0; animation: fu .85s .75s forwards;
+}
+
+/* Proof strip */
+.hero-proof {
+  display: flex; flex-wrap: wrap; gap: 0; justify-content: center;
+  border: 1px solid var(--wire-g); margin: 44px auto 0; max-width: 900px;
+  opacity: 0; animation: fu .85s .95s forwards;
+}
+.hp-item { padding: 20px 36px; border-right: 1px solid var(--wire-g); flex: 1; min-width: 150px; text-align: center; }
+.hp-item:last-child { border-right: none; }
+.hp-num { font-family: 'Syne', sans-serif; font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 800; color: var(--gold); display: block; line-height: 1; }
+.hp-label { font-size: .58rem; letter-spacing: .2em; text-transform: uppercase; color: var(--fog); margin-top: 4px; display: block; }
+.hp-ctx { font-size: .68rem; color: var(--ash); margin-top: 2px; line-height: 1.3; }
+
+.hero-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 36px; opacity: 0; animation: fu .85s 1.1s forwards; }
+
+.scroll-cue { position: absolute; bottom: 48px; left: 50%; transform: translateX(-50%); z-index: 10; display: flex; flex-direction: column; align-items: center; gap: 6px; opacity: 0; animation: fu 1s 1.8s forwards; }
+.scroll-cue span { font-size: .58rem; letter-spacing: .3em; text-transform: uppercase; color: var(--fog); font-family: 'Syne', sans-serif; }
+.scroll-line { width: 1px; height: 44px; background: linear-gradient(var(--gold), transparent); animation: sc 2s ease-in-out infinite; }
+@keyframes sc { 0%,100%{opacity:1;transform:scaleY(1);transform-origin:top} 50%{opacity:.3} }
+@keyframes fu { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:none} }
+
+/* ─────────────────────────────────────────
+   §2 CINEMATIC CHAPTER — World Cup
+───────────────────────────────────────── */
+#wc-chapter {
+  padding: 0; overflow: hidden; position: relative;
+  background: linear-gradient(135deg, #0A1520 0%, var(--void) 60%);
+}
+.wc-inner { display: grid; grid-template-columns: 1fr 1fr; min-height: 560px; }
+.wc-left {
+  padding: 80px 64px; display: flex; flex-direction: column; justify-content: center;
+  border-right: 1px solid var(--wire-g);
+}
+.wc-right {
+  padding: 80px 64px; display: flex; flex-direction: column; justify-content: center;
+  background: var(--gold-dim);
+  position: relative; overflow: hidden;
+}
+/* Animated rings for urgency */
+.wc-rings {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  pointer-events: none;
+}
+.wc-ring {
+  position: absolute; border-radius: 50%; border: 1px solid rgba(201,165,60,.15);
+  top: 50%; left: 50%; transform: translate(-50%,-50%);
+  animation: ringPulse 4s ease-in-out infinite;
+}
+.wc-ring:nth-child(1) { width: 200px; height: 200px; animation-delay: 0s; }
+.wc-ring:nth-child(2) { width: 350px; height: 350px; animation-delay: .8s; }
+.wc-ring:nth-child(3) { width: 500px; height: 500px; animation-delay: 1.6s; }
+@keyframes ringPulse { 0%,100%{opacity:.3;transform:translate(-50%,-50%) scale(1)} 50%{opacity:.08;transform:translate(-50%,-50%) scale(1.04)} }
+.wc-countdown { display: grid; grid-template-columns: repeat(2,1fr); gap: 2px; margin-top: 32px; position: relative; z-index: 2; }
+.wc-count-box { background: rgba(7,7,10,.6); backdrop-filter: blur(8px); padding: 24px 20px; border: 1px solid var(--wire-g); text-align: center; }
+.wc-count-val { font-family: 'Syne', sans-serif; font-size: 2.6rem; font-weight: 800; color: var(--gold); display: block; line-height: 1; }
+.wc-count-key { font-size: .58rem; letter-spacing: .2em; text-transform: uppercase; color: var(--fog); margin-top: 4px; display: block; }
+.wc-stat-row { display: flex; align-items: flex-start; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--wire); }
+.wc-stat-row:last-child { border-bottom: none; }
+.wc-stat-num { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--gold); min-width: 90px; line-height: 1; }
+.wc-stat-desc { font-size: .82rem; color: var(--ash); line-height: 1.6; }
+.wc-stat-desc strong { color: var(--white); font-weight: 500; display: block; margin-bottom: 2px; }
+@media (max-width: 768px) { .wc-inner { grid-template-columns: 1fr; } .wc-left,.wc-right { padding: 60px 24px; } .wc-left { border-right: none; border-bottom: 1px solid var(--wire-g); } }
+
+/* ─────────────────────────────────────────
+   §3 VERSUS
+───────────────────────────────────────── */
+#versus { background: var(--base); }
+.vs-table-wrap { overflow-x: auto; margin-top: 48px; }
+.vs-table { width: 100%; border-collapse: collapse; min-width: 640px; }
+.vs-table th { font-family: 'Syne', sans-serif; font-size: .62rem; letter-spacing: .22em; text-transform: uppercase; padding: 14px 20px; border-bottom: 1px solid var(--wire-g); font-weight: 700; }
+.vs-table th:first-child { text-align: left; color: var(--fog); font-weight: 500; }
+.vs-table th.col-ad { color: var(--gold); }
+.vs-table th.col-b, .vs-table th.col-c { color: var(--fog); }
+.vs-table td { padding: 15px 20px; border-bottom: 1px solid var(--wire); font-size: .85rem; }
+.vs-table td:first-child { color: var(--ash); font-size: .78rem; letter-spacing: .04em; }
+.vs-table td.ad { color: var(--gold); font-family: 'Syne', sans-serif; font-size: .92rem; font-weight: 700; text-align: center; }
+.vs-table td.other { color: var(--fog); text-align: center; }
+.vs-table tr:hover td { background: rgba(255,255,255,.015); }
+.win { background: rgba(201,165,60,.1); color: var(--gold); font-size: .56rem; letter-spacing: .15em; text-transform: uppercase; padding: 3px 8px; margin-left: 8px; border: 1px solid rgba(201,165,60,.25); font-family: 'Syne', sans-serif; font-weight: 700; vertical-align: middle; }
+.vs-disclaimer { margin-top: 16px; font-size: .68rem; color: var(--fog); font-family: 'Syne Mono', monospace; letter-spacing: .04em; line-height: 1.6; }
+
+/* ─────────────────────────────────────────
+   §4 BUYER TRACKS
+───────────────────────────────────────── */
+#tracks { background: var(--void); }
+.track-nav { display: flex; gap: 2px; margin: 48px 0 0; }
+.track-tab {
+  flex: 1; padding: 18px 20px; background: var(--raised); border: 1px solid var(--wire);
+  cursor: none; font-family: 'Syne', sans-serif; font-size: .72rem; font-weight: 700;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--fog);
+  transition: all .22s; border-bottom: none; text-align: center;
+}
+.track-tab:hover { color: var(--ash); background: var(--lift); }
+.track-tab.on { background: var(--base); color: var(--gold); border-color: var(--wire-g); }
+.track-body { display: none; background: var(--base); border: 1px solid var(--wire-g); border-top: 2px solid var(--gold); padding: 52px 48px; }
+.track-body.on { display: block; }
+@media (max-width: 680px) { .track-body { padding: 32px 20px; } .track-nav { flex-direction: column; } .track-tab { border-bottom: 1px solid var(--wire); } }
+
+/* Track layout */
+.t-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+@media (max-width: 860px) { .t-grid { grid-template-columns: 1fr; gap: 40px; } }
+
+/* Space listings */
+.spaces-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 18px; background: var(--raised); border: 1px solid var(--wire); border-bottom: none; font-family: 'Syne', sans-serif; font-size: .58rem; letter-spacing: .3em; text-transform: uppercase; color: var(--fog); }
+.space-list { display: flex; flex-direction: column; }
+.space-item {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 16px 18px; background: var(--raised); border: 1px solid var(--wire);
+  border-top: none; cursor: none; transition: all .2s; position: relative; overflow: hidden;
+}
+.space-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--gold); transform: scaleY(0); transform-origin: bottom; transition: transform .25s; }
+.space-item:hover { background: var(--lift); border-color: var(--wire-g); }
+.space-item:hover::before { transform: scaleY(1); }
+.si-info .si-name { font-weight: 500; font-size: .88rem; margin-bottom: 3px; }
+.si-info .si-meta { font-size: .7rem; color: var(--fog); }
+.si-badge { font-family: 'Syne', sans-serif; font-size: .58rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; padding: 4px 11px; flex-shrink: 0; border: 1px solid; }
+.badge-hot { color: #E05050; border-color: rgba(224,80,80,.3); background: rgba(224,80,80,.06); }
+.badge-avail { color: var(--gold); border-color: var(--wire-g); background: var(--gold-dim); }
+.badge-ltd { color: var(--ash); border-color: var(--wire); background: rgba(255,255,255,.03); }
+
+/* ROI panel */
+.roi-panel { background: var(--raised); border: 1px solid var(--wire-g); padding: 32px; }
+.roi-title { font-family: 'Syne', sans-serif; font-size: .6rem; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; }
+.roi-row { display: flex; justify-content: space-between; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--wire); }
+.roi-row:last-child { border-bottom: none; }
+.roi-key { font-size: .78rem; color: var(--ash); }
+.roi-val { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; }
+.rv-gold { color: var(--gold); }
+.rv-green { color: var(--green); }
+.objection-block { margin-top: 20px; padding: 20px 22px; border-left: 2px solid var(--gold); background: rgba(201,165,60,.04); }
+.obj-q { font-size: .72rem; color: var(--fog); margin-bottom: 8px; font-style: italic; }
+.obj-a { font-size: .78rem; color: var(--ash); line-height: 1.6; }
+.obj-a strong { color: var(--white); font-weight: 500; }
+
+/* Reach Estimator */
+.estimator { background: var(--raised); border: 1px solid var(--wire-g); padding: 32px; }
+.est-title { font-family: 'Syne', sans-serif; font-size: .6rem; letter-spacing: .3em; text-transform: uppercase; color: var(--gold); margin-bottom: 24px; }
+.est-field { margin-bottom: 22px; }
+.est-lbl { font-size: .72rem; color: var(--ash); display: flex; justify-content: space-between; margin-bottom: 8px; }
+.est-lbl span { color: var(--gold); font-weight: 500; font-family: 'Syne', sans-serif; }
+input[type=range] { width: 100%; appearance: none; height: 2px; background: var(--lift); outline: none; cursor: none; }
+input[type=range]::-webkit-slider-thumb { appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--gold); cursor: none; border: 2px solid var(--base); }
+input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--gold); cursor: none; border: 2px solid var(--base); }
+.est-output {
+  background: linear-gradient(135deg, rgba(201,165,60,.08), rgba(201,165,60,.02));
+  border: 1px solid var(--wire-g); padding: 24px; margin-top: 20px;
+}
+.eo-num { font-family: 'Syne', sans-serif; font-size: 3rem; font-weight: 800; color: var(--gold); display: block; line-height: 1; }
+.eo-label { font-size: .7rem; color: var(--ash); display: block; margin-top: 4px; }
+.eo-detail { font-size: .74rem; color: var(--fog); margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--wire); line-height: 1.6; }
+.eo-detail strong { color: var(--gold); }
+
+/* Venue selector */
+.v-list { display: flex; flex-direction: column; gap: 2px; }
+.v-opt {
+  display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 16px;
+  padding: 16px 18px; background: var(--raised); border: 1px solid var(--wire);
+  cursor: none; transition: all .2s;
+}
+.v-opt:hover, .v-opt.on { background: var(--lift); border-color: var(--wire-g); }
+.v-opt.on .v-dot { background: var(--gold); }
+.v-name { font-weight: 500; font-size: .88rem; margin-bottom: 2px; }
+.v-cap-text { font-size: .7rem; color: var(--fog); }
+.v-right { display: flex; align-items: center; gap: 12px; }
+.v-num { font-family: 'Syne', sans-serif; font-size: .95rem; font-weight: 700; color: var(--gold); white-space: nowrap; }
+.v-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--fog); border: 1px solid var(--wire); transition: background .2s; flex-shrink: 0; }
+.v-detail { background: var(--raised); border: 1px solid var(--wire-g); padding: 28px; margin-top: 2px; }
+.vd-hed { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; margin-bottom: 16px; }
+.vd-specs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.vd-spec { background: var(--base); padding: 14px; }
+.vd-sv { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--gold); display: block; }
+.vd-sk { font-size: .6rem; letter-spacing: .15em; text-transform: uppercase; color: var(--fog); }
+.vd-feats { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.vd-feats li { font-size: .8rem; color: var(--ash); display: flex; align-items: center; gap: 10px; }
+.vd-feats li::before { content: ''; width: 10px; height: 1px; background: var(--gold); flex-shrink: 0; }
+.vd-quote { margin-top: 18px; padding: 16px 18px; border-left: 2px solid var(--gold); background: rgba(201,165,60,.03); font-size: .76rem; color: var(--ash); line-height: 1.6; font-style: italic; }
+.vd-quote strong { color: var(--fog); font-style: normal; font-size: .68rem; display: block; margin-top: 8px; }
+
+/* ─────────────────────────────────────────
+   §5 LIVE INQUIRY ENGINE ← THE MONEY FEATURE
+───────────────────────────────────────── */
+#inquiry { background: var(--base); }
+.inq-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; align-items: start; }
+@media (max-width: 860px) { .inq-wrap { grid-template-columns: 1fr; } }
+.inq-left { padding: 56px 52px; background: var(--raised); border: 1px solid var(--wire); }
+.inq-right { padding: 56px 52px; background: var(--void); border: 1px solid var(--wire-g); min-height: 500px; display: flex; flex-direction: column; }
+@media (max-width: 680px) { .inq-left,.inq-right { padding: 36px 24px; } }
+
+.inq-field { margin-bottom: 28px; }
+.inq-label { font-family: 'Syne', sans-serif; font-size: .62rem; letter-spacing: .22em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; display: block; }
+.inq-options { display: flex; flex-wrap: wrap; gap: 8px; }
+.inq-opt {
+  padding: 9px 18px; background: var(--base); border: 1px solid var(--wire);
+  font-size: .78rem; font-family: 'Syne', sans-serif; font-weight: 600; color: var(--fog);
+  cursor: none; transition: all .18s;
+}
+.inq-opt:hover { border-color: var(--wire-g); color: var(--ash); }
+.inq-opt.sel { background: var(--gold-dim); border-color: var(--gold); color: var(--gold); }
+.inq-select {
+  width: 100%; background: var(--base); border: 1px solid var(--wire); color: var(--white);
+  padding: 11px 14px; font-family: 'DM Sans', sans-serif; font-size: .88rem;
+  appearance: none; cursor: none; outline: none; transition: border-color .2s;
+}
+.inq-select:focus { border-color: var(--wire-g); }
+.inq-select option { background: var(--base); }
+
+.inq-match-btn {
+  width: 100%; padding: 16px; background: var(--gold); color: var(--void);
+  border: none; cursor: none; font-family: 'Syne', sans-serif; font-size: .78rem;
+  font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
+  transition: background .2s; margin-top: 8px;
+}
+.inq-match-btn:hover { background: var(--gold-hi); }
+
+/* Result card */
+.inq-result-idle { display: flex; flex-direction: column; justify-content: center; align-items: center; flex: 1; text-align: center; gap: 12px; }
+.inq-idle-icon { font-size: 2.4rem; opacity: .3; }
+.inq-idle-text { font-size: .82rem; color: var(--fog); max-width: 260px; line-height: 1.6; }
+.inq-result-card { display: none; flex-direction: column; gap: 0; flex: 1; }
+.inq-result-card.show { display: flex; }
+.irc-header { padding: 24px 28px; border-bottom: 1px solid var(--wire-g); }
+.irc-match-label { font-family: 'Syne', sans-serif; font-size: .58rem; letter-spacing: .3em; text-transform: uppercase; color: var(--green); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.irc-match-label::before { content: ''; width: 6px; height: 6px; background: var(--green); border-radius: 50%; }
+.irc-title { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; line-height: 1.1; }
+.irc-body { padding: 24px 28px; display: flex; flex-direction: column; gap: 16px; flex: 1; }
+.irc-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.irc-metric { background: var(--raised); padding: 16px; }
+.irc-mv { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 800; color: var(--gold); display: block; }
+.irc-mk { font-size: .62rem; letter-spacing: .15em; text-transform: uppercase; color: var(--fog); }
+.irc-pitch { font-size: .82rem; color: var(--ash); line-height: 1.7; padding: 16px 0; border-top: 1px solid var(--wire); border-bottom: 1px solid var(--wire); }
+.irc-cta { padding: 24px 28px; display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* ─────────────────────────────────────────
+   §6 FOOTFALL / ZONE MAP
+───────────────────────────────────────── */
+#footfall { background: var(--void); }
+.ff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+@media (max-width: 860px) { .ff-grid { grid-template-columns: 1fr; gap: 40px; } }
+.ff-sticky { position: sticky; top: 100px; }
+.zone-map-wrap { border: 1px solid var(--wire-g); background: var(--base); padding: 24px; }
+.zone-map-wrap svg { width: 100%; height: auto; display: block; }
+.zone-legend { margin-top: 2px; display: flex; flex-direction: column; gap: 2px; }
+.zl { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; background: var(--raised); border: 1px solid var(--wire); }
+.zl-l { display: flex; align-items: center; gap: 10px; font-size: .78rem; color: var(--ash); }
+.zl-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+.zl-r { display: flex; align-items: center; gap: 10px; }
+.zl-bar { height: 3px; background: var(--wire); position: relative; width: 72px; }
+.zl-fill { position: absolute; left: 0; top: 0; bottom: 0; transition: width .5s ease; }
+.zl-val { font-family: 'Syne', sans-serif; font-size: .85rem; font-weight: 700; min-width: 52px; text-align: right; }
+.ff-stats { display: flex; flex-direction: column; gap: 2px; }
+.ff-row {
+  display: flex; align-items: flex-start; gap: 20px;
+  padding: 22px 20px; background: var(--raised); border: 1px solid var(--wire);
+  transition: all .25s;
+}
+.ff-row:hover { border-color: var(--wire-g); background: var(--lift); }
+.ff-big { font-family: 'Syne', sans-serif; font-size: 2.2rem; font-weight: 800; color: var(--gold); min-width: 100px; line-height: 1; }
+.ff-info { flex: 1; }
+.ff-info strong { display: block; font-size: .88rem; font-weight: 500; margin-bottom: 3px; }
+.ff-info p { font-size: .75rem; color: var(--fog); line-height: 1.5; }
+.ff-trend { font-family: 'Syne', sans-serif; font-size: .72rem; font-weight: 700; color: var(--green); flex-shrink: 0; align-self: center; }
+
+/* ─────────────────────────────────────────
+   §7 BRAND PROOF
+───────────────────────────────────────── */
+#proof { background: var(--base); }
+.proof-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 48px; }
+@media (max-width: 680px) { .proof-grid { grid-template-columns: 1fr; } }
+.proof-card {
+  background: var(--raised); border: 1px solid var(--wire); padding: 28px 24px;
+  position: relative; overflow: hidden; transition: all .25s;
+}
+.proof-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--gold); transform: scaleY(0); transform-origin: bottom; transition: transform .3s; }
+.proof-card:hover { background: var(--lift); }
+.proof-card:hover::before { transform: scaleY(1); }
+.pc-sector { position: absolute; top: 16px; right: 16px; font-family: 'Syne', sans-serif; font-size: .56rem; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; padding: 4px 10px; background: var(--gold-dim); color: var(--gold); border: 1px solid var(--wire-g); }
+.pc-brand { font-family: 'Syne', sans-serif; font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--plat); margin-bottom: 10px; }
+.pc-result { font-family: 'Syne', sans-serif; font-size: 2.8rem; font-weight: 800; color: var(--gold); line-height: 1; margin-bottom: 8px; }
+.pc-desc { font-size: .75rem; color: var(--fog); line-height: 1.55; }
+.proof-disclaimer { margin-top: 16px; font-size: .65rem; color: var(--fog); font-family: 'Syne Mono', monospace; padding: 12px 16px; border: 1px solid var(--wire); background: var(--raised); line-height: 1.6; }
+
+/* Pull quotes */
+.quotes-row { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 2px; }
+@media (max-width: 680px) { .quotes-row { grid-template-columns: 1fr; } }
+.quote-block { background: var(--raised); border: 1px solid var(--wire); padding: 28px 24px; border-left: 2px solid var(--gold); }
+.quote-text { font-size: .9rem; color: var(--plat); line-height: 1.7; font-style: italic; margin-bottom: 14px; }
+.quote-attr { font-size: .68rem; color: var(--fog); letter-spacing: .1em; }
+.quote-attr strong { color: var(--gold); }
+
+/* Press logos */
+.press-row { display: flex; flex-wrap: wrap; gap: 2px; margin-top: 40px; }
+.press-item { flex: 1; min-width: 100px; padding: 20px; background: var(--raised); border: 1px solid var(--wire); display: flex; align-items: center; justify-content: center; transition: background .2s; }
+.press-item:hover { background: var(--lift); }
+.press-name { font-family: 'Syne', sans-serif; font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--fog); }
+
+/* ─────────────────────────────────────────
+   §8 ATTRACTIONS (compressed)
+───────────────────────────────────────── */
+#attr { background: var(--void); }
+.attr-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: end; margin-bottom: 48px; }
+@media (max-width: 768px) { .attr-intro { grid-template-columns: 1fr; gap: 24px; } }
+.attr-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 2px; }
+@media (max-width: 900px) { .attr-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 560px) { .attr-grid { grid-template-columns: 1fr 1fr; } }
+.attr-card {
+  background: var(--raised); border: 1px solid var(--wire); padding: 24px 18px;
+  display: flex; flex-direction: column; cursor: none; transition: all .25s; position: relative; overflow: hidden;
+}
+.attr-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: var(--gold); transform: scaleX(0); transition: transform .3s; }
+.attr-card:hover { background: var(--lift); transform: translateY(-3px); }
+.attr-card:hover::after { transform: scaleX(1); }
+.attr-icon { font-size: 1.6rem; margin-bottom: 12px; }
+.attr-name { font-family: 'Syne', sans-serif; font-size: .8rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; margin-bottom: 8px; }
+.attr-stat { font-family: 'Syne', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--gold); line-height: 1; margin-bottom: 6px; }
+.attr-desc { font-size: .7rem; color: var(--fog); line-height: 1.5; margin-bottom: auto; }
+.attr-crown { font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ash); margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--wire); }
+.attr-multiplier { margin-top: 20px; padding: 18px 20px; background: rgba(201,165,60,.05); border: 1px solid var(--wire-g); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.am-text { font-size: .8rem; color: var(--ash); line-height: 1.6; max-width: 500px; }
+.am-text strong { color: var(--gold); }
+
+/* ─────────────────────────────────────────
+   §9 OBJECTIONS
+───────────────────────────────────────── */
+#objections { background: var(--base); padding: 80px 0; }
+.obj-grid { display: flex; flex-direction: column; gap: 2px; margin-top: 36px; }
+.obj-item { cursor: none; }
+.obj-q-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  padding: 22px 24px; background: var(--raised); border: 1px solid var(--wire); transition: all .2s;
+}
+.obj-q-row:hover { border-color: var(--wire-g); background: var(--lift); }
+.obj-q-text { font-size: .9rem; color: var(--plat); font-style: italic; }
+.obj-toggle { font-family: 'Syne', sans-serif; font-size: 1.2rem; color: var(--gold); transition: transform .3s; flex-shrink: 0; user-select: none; }
+.obj-item.open .obj-toggle { transform: rotate(45deg); }
+.obj-answer {
+  max-height: 0; overflow: hidden; transition: max-height .4s cubic-bezier(.16,1,.3,1);
+  background: rgba(201,165,60,.03); border: 1px solid var(--wire-g); border-top: none;
+}
+.obj-answer-inner { padding: 22px 24px; font-size: .84rem; color: var(--ash); line-height: 1.75; }
+.obj-answer-inner strong { color: var(--gold); font-weight: 500; }
+.obj-item.open .obj-answer { max-height: 300px; }
+
+/* ─────────────────────────────────────────
+   §10 FINAL CTA
+───────────────────────────────────────── */
+#cta-final {
+  background: var(--void); padding: 160px 0; position: relative; overflow: hidden;
+}
+.cta-bg-glow { position: absolute; inset: 0; background: radial-gradient(ellipse 60% 50% at 50% 100%, rgba(201,165,60,.06) 0%, transparent 70%); }
+.cta-center { text-align: center; position: relative; z-index: 2; max-width: 900px; margin: 0 auto; padding: 0 48px; }
+@media (max-width: 680px) { .cta-center { padding: 0 20px; } }
+.cta-eyebrow { font-family: 'Syne', sans-serif; font-size: .6rem; letter-spacing: .4em; text-transform: uppercase; color: var(--gold); display: block; margin-bottom: 18px; }
+.cta-hed { font-family: 'Syne', sans-serif; font-size: clamp(2.8rem, 6vw, 6.5rem); font-weight: 800; line-height: .9; letter-spacing: -.03em; margin-bottom: 24px; }
+.cta-hed em { color: var(--gold); font-style: italic; font-family: 'DM Sans', sans-serif; font-weight: 300; }
+.cta-sub { font-size: .96rem; color: var(--ash); line-height: 1.75; max-width: 600px; margin: 0 auto 44px; }
+.cta-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+/* Contact trio */
+.cta-trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 64px; }
+@media (max-width: 768px) { .cta-trio { grid-template-columns: 1fr; } }
+.ct-box { background: var(--raised); border: 1px solid var(--wire); padding: 36px 28px; display: flex; flex-direction: column; transition: all .25s; }
+.ct-box:hover { border-color: var(--wire-g); background: var(--lift); }
+.ct-icon { font-size: 1.4rem; margin-bottom: 14px; }
+.ct-title { font-family: 'Syne', sans-serif; font-size: .88rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px; }
+.ct-desc { font-size: .78rem; color: var(--ash); line-height: 1.65; flex: 1; margin-bottom: 20px; }
+.ct-link { font-family: 'Syne', sans-serif; font-size: .64rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); text-decoration: none; display: flex; align-items: center; gap: 6px; transition: gap .2s; margin-top: auto; }
+.ct-link:hover { gap: 12px; }
+
+/* Footer */
+footer { padding: 28px 48px; border-top: 1px solid var(--wire); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.foot-brand { font-family: 'Syne', sans-serif; font-size: .95rem; font-weight: 800; letter-spacing: .2em; color: var(--white); }
+.foot-brand em { color: var(--gold); font-style: normal; }
+footer p { font-size: .65rem; color: var(--fog); letter-spacing: .08em; }
+@media (max-width: 680px) { footer { padding: 24px 20px; flex-direction: column; align-items: flex-start; } }
+</style>
+</head>
+<body>
+
+<div id="c-dot"></div>
+<div id="c-ring"></div>
+<div id="prog"></div>
+
+<!-- ── STICKY STRIP ── -->
+<div id="strip">
+  <div class="strip-left">
+    <div class="strip-pulse"></div>
+    <div class="strip-msg"><strong>2026 FIFA World Cup Final — MetLife Stadium.</strong> Your window is closing.</div>
+  </div>
+  <a href="#cta-final" class="strip-cta">Book 15-Min Briefing →</a>
+</div>
+
+<!-- ── BUYER GATE ── -->
+<div id="gate">
+  <div class="gate-box">
+    <span class="gate-label">American Dream Meadowlands · Commercial Intelligence</span>
+    <h1 class="gate-hed">What's your<br>business objective?</h1>
+    <p class="gate-sub">We'll route you directly to the data, spaces, and numbers that matter for your decision.</p>
+    <div class="gate-cards">
+      <a href="#tracks" class="gate-card" onclick="gotoTrack('retail')">
+        <span class="gc-icon">🏪</span>
+        <span class="gc-title">Retail Leasing</span>
+        <span class="gc-sub">Flagship · Premium · Experiential · F&B · Pop-up. Build a physical acquisition channel.</span>
+        <span class="gc-arrow">→</span>
+      </a>
+      <a href="#tracks" class="gate-card" onclick="gotoTrack('sponsor')">
+        <span class="gc-icon">📡</span>
+        <span class="gc-title">Sponsorship</span>
+        <span class="gc-sub">Naming rights · Activations · Digital OOH. Own the attention economy of 40M visitors.</span>
+        <span class="gc-arrow">→</span>
+      </a>
+      <a href="#tracks" class="gate-card" onclick="gotoTrack('events')">
+        <span class="gc-icon">🎤</span>
+        <span class="gc-title">Events & Venues</span>
+        <span class="gc-sub">Dream Live · Backyard · Park buyouts. Scale from 500 to 35,000 attendees.</span>
+        <span class="gc-arrow">→</span>
+      </a>
+    </div>
+    <button class="gate-skip" onclick="closeGate()">See the full dossier →</button>
+  </div>
+</div>
+
+<!-- ── NAV ── -->
+<nav id="nav">
+  <a href="#hero" class="nav-brand">AMERICAN <em>DREAM</em></a>
+  <ul class="nav-links">
+    <li><a href="#versus">Competitive Edge</a></li>
+    <li><a href="#tracks">Your Path</a></li>
+    <li><a href="#inquiry">Inquiry Engine</a></li>
+    <li><a href="#proof">Proof</a></li>
+    <li><a href="#cta-final" class="nav-pill">Talk to Us</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════════════════════════════
+     §1 HERO
+═══════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-vid-wrap">
+    <div class="vid-fallback"></div>
+    <!-- Real YouTube embed — American Dream official footage -->
+    <iframe src="https://www.youtube.com/embed/FBTB7I6mRfo?autoplay=1&mute=1&loop=1&playlist=FBTB7I6mRfo&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&enablejsapi=0" frameborder="0" allow="autoplay" title="American Dream"></iframe>
+  </div>
+  <div class="hero-grain"></div>
+  <div class="hero-vignette"></div>
+  <div class="hero-bottom"></div>
+
+  <!-- Ticker -->
+  <div class="hero-ticker">
+    <div class="ticker-inner">
+      <span class="ticker-item">3,000,000 SQ FT</span>
+      <span class="ticker-item">40M+ ANNUAL VISITORS</span>
+      <span class="ticker-item">$5B DEVELOPMENT</span>
+      <span class="ticker-item">55% ENTERTAINMENT</span>
+      <span class="ticker-item">0% APPAREL TAX</span>
+      <span class="ticker-item">2026 FIFA WORLD CUP FINAL — METLIFE STADIUM</span>
+      <span class="ticker-item">556FT ULTIMATE DISPLAY</span>
+      <span class="ticker-item">89% LEASED · 170K SQ FT NEW TENANTS 2023</span>
+      <span class="ticker-item">3,000,000 SQ FT</span>
+      <span class="ticker-item">40M+ ANNUAL VISITORS</span>
+      <span class="ticker-item">$5B DEVELOPMENT</span>
+      <span class="ticker-item">55% ENTERTAINMENT</span>
+      <span class="ticker-item">0% APPAREL TAX</span>
+      <span class="ticker-item">2026 FIFA WORLD CUP FINAL — METLIFE STADIUM</span>
+      <span class="ticker-item">556FT ULTIMATE DISPLAY</span>
+      <span class="ticker-item">89% LEASED · 170K SQ FT NEW TENANTS 2023</span>
+    </div>
+  </div>
+
+  <div class="hero-content">
+    <div class="urgency-pill">
+      <div class="urgency-pulse"></div>
+      ⚽ 2026 FIFA World Cup Final · MetLife Stadium · Adjacent Property · Window Closing
+    </div>
+    <h1 class="hero-hed">
+      <span class="gold-word">40 Million</span><br>Consumers.<br>
+      <span class="italic-line">Already Here. Already Spending.</span>
+    </h1>
+    <p class="hero-sub">
+      American Dream Meadowlands is not a mall. It is the apex of the new experiential economy — 
+      3 million square feet, 9 miles from Manhattan, structurally immune to e-commerce, 
+      and about to become the epicenter of the world's most-watched sporting event.
+    </p>
+    <div class="hero-proof">
+      <div class="hp-item">
+        <span class="hp-num" data-target="40" data-suf="M+">0M+</span>
+        <span class="hp-label">Annual Visitors</span>
+        <span class="hp-ctx">vs. 12M typical super-regional</span>
+      </div>
+      <div class="hp-item">
+        <span class="hp-num">$143K</span>
+        <span class="hp-label">Peak Area HH Income</span>
+        <span class="hp-ctx">Rutherford, NJ catchment <span class="src">Dossier §2</span></span>
+      </div>
+      <div class="hp-item">
+        <span class="hp-num">55/45</span>
+        <span class="hp-label">Entertainment Ratio</span>
+        <span class="hp-ctx">vs. ~30% at Mall of America</span>
+      </div>
+      <div class="hp-item">
+        <span class="hp-num">9mi</span>
+        <span class="hp-label">From Manhattan</span>
+        <span class="hp-ctx">20.1M MSA population <span class="src">§2</span></span>
+      </div>
+    </div>
+    <div class="hero-ctas">
+      <a href="#tracks" class="btn btn-gold">Find My Opportunity →</a>
+      <a href="#inquiry" class="btn btn-ghost">Live Inquiry Engine</a>
+    </div>
+  </div>
+  <div class="scroll-cue"><span>Scroll</span><div class="scroll-line"></div></div>
+</section>
+
+<!-- ═══════════════════════════════════
+     §2 WORLD CUP CHAPTER — cinematic
+═══════════════════════════════════ -->
+<div id="wc-chapter">
+  <div class="wc-inner">
+    <div class="wc-left">
+      <span class="tag r">The Catalyst</span>
+      <h2 class="hed-lg r d1">The <em>Once-in-a-Decade</em><br>Convergence</h2>
+      <div class="rule r d2"></div>
+      <div class="wc-stat-row r d2">
+        <div class="wc-stat-num">8</div>
+        <div class="wc-stat-desc"><strong>FIFA World Cup Matches at MetLife Stadium</strong>Including the Final — the most-watched single sporting event in human history, ~1.5 billion viewers.</div>
+      </div>
+      <div class="wc-stat-row r d3">
+        <div class="wc-stat-num">2M</div>
+        <div class="wc-stat-desc"><strong>Projected visitors through American Dream</strong>during the 39-day Dream Fan Fest <span class="src">Dossier §11</span>. International, high-net-worth, pre-qualified spending audience.</div>
+      </div>
+      <div class="wc-stat-row r d4">
+        <div class="wc-stat-num">$150</div>
+        <div class="wc-stat-desc"><strong>Projected NYC–NJ train fare on match days</strong>Price spike forces affluent fans into American Dream's 33,000-space parking ecosystem.</div>
+      </div>
+      <p class="body r d5" style="margin-top:24px">
+        FIFA enforces exclusion zones around host stadiums. <strong style="color:var(--white)">American Dream has been designated as the primary parking and hospitality solution for MetLife.</strong> There is no other property in this position. The window to design, build, and open a flagship before the Final is narrowing.
+      </p>
+    </div>
+    <div class="wc-right">
+      <div class="wc-rings">
+        <div class="wc-ring"></div><div class="wc-ring"></div><div class="wc-ring"></div>
+      </div>
+      <span class="tag r" style="position:relative;z-index:2">Your Countdown</span>
+      <h3 class="hed-md r d1" style="position:relative;z-index:2;margin-bottom:24px">
+        Time remaining<br>to be <em>operational</em><br>for the Final
+      </h3>
+      <div class="wc-countdown r d2">
+        <div class="wc-count-box"><span class="wc-count-val" id="wc-months">14</span><span class="wc-count-key">Months</span></div>
+        <div class="wc-count-box"><span class="wc-count-val" id="wc-weeks">62</span><span class="wc-count-key">Weeks</span></div>
+        <div class="wc-count-box" style="grid-column:span 2"><span class="wc-count-val" id="wc-days">437</span><span class="wc-count-key">Days Until World Cup Final</span></div>
+      </div>
+      <p class="body r d3" style="margin-top:24px;position:relative;z-index:2;font-size:.78rem">
+        Typical flagship retail buildout: 6–9 months. Sponsorship activation design + production: 4–6 months. <strong style="color:var(--signal)">Act now or cede the ground to a competitor.</strong>
+      </p>
+      <a href="#cta-final" class="btn btn-gold r d4" style="margin-top:24px;position:relative;z-index:2">Secure Your Position Before It's Gone →</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     §3 COMPETITIVE COMPARISON
+═══════════════════════════════════ -->
+<section id="versus">
+  <div class="w">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:end;margin-bottom:0" class="r">
+      <div>
+        <span class="tag">Competitive Intelligence</span>
+        <h2 class="hed-lg">Why <em>American Dream</em><br>Wins the Argument</h2>
+        <div class="rule"></div>
+      </div>
+      <div>
+        <p class="body">The numbers are not close. No other property in the Western Hemisphere combines this metro density, income profile, entertainment ratio, and global event proximity in a single asset.</p>
+      </div>
+    </div>
+    <div class="vs-table-wrap r d1">
+      <table class="vs-table">
+        <thead>
+          <tr>
+            <th style="text-align:left">Metric</th>
+            <th class="col-ad">American Dream ✦</th>
+            <th class="col-b">Mall of America</th>
+            <th class="col-c">West Edmonton</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Primary Metro Population <span class="src">§3</span></td><td class="ad">20.1M <span class="win">LARGEST</span></td><td class="other">3.6M</td><td class="other">1.5M</td></tr>
+          <tr><td>Miles to Top Metro Core</td><td class="ad">9 mi — NYC <span class="win">CLOSEST</span></td><td class="other">16 mi — Minneapolis</td><td class="other">Urban core only</td></tr>
+          <tr><td>Peak Catchment HH Income</td><td class="ad">$143K <span class="win">HIGHEST</span></td><td class="other">~$78K</td><td class="other">~$68K CAD</td></tr>
+          <tr><td>Entertainment % of Space <span class="src">§3</span></td><td class="ad">55% <span class="win">MOST</span></td><td class="other">~30%</td><td class="other">~40%</td></tr>
+          <tr><td>Luxury Tier <span class="src">§3</span></td><td class="ad">Tier 1 (Hermès, Rolex, Saks)</td><td class="other">Tier 2–3</td><td class="other">Tier 2</td></tr>
+          <tr><td>Indoor Ski Slope</td><td class="ad">✓ Only in USA <span class="win">EXCLUSIVE</span></td><td class="other">✗</td><td class="other">✓</td></tr>
+          <tr><td>State Apparel Tax</td><td class="ad">0% NJ <span class="win">TAX HAVEN</span></td><td class="other">MN rates apply</td><td class="other">AB rates apply</td></tr>
+          <tr><td>Adjacent Stadium</td><td class="ad">MetLife 82,500 + 2026 WC Final</td><td class="other">None direct</td><td class="other">None direct</td></tr>
+          <tr><td>Exterior LED Display <span class="src">§5</span></td><td class="ad">556 ft Ultimate Display</td><td class="other">Standard signage</td><td class="other">Standard signage</td></tr>
+          <tr><td>Sponsored Naming Rights Benchmark <span class="src">§5</span></td><td class="ad">$3M–$7M/yr (theme park)</td><td class="other">~$1–2M/yr est.</td><td class="other">~$0.5–1M/yr est.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="vs-disclaimer r d2">Note: Competitor figures are estimates based on public sources and industry benchmarks. American Dream metrics sourced from property dossier §1–§12. All figures in USD unless stated.</p>
+    <div style="margin-top:20px;padding:18px 22px;background:rgba(212,240,80,.05);border:1px solid rgba(212,240,80,.18);display:flex;align-items:flex-start;gap:14px" class="r d3">
+      <span style="font-size:1.1rem;flex-shrink:0">⚡</span>
+      <p style="font-size:.8rem;color:var(--ash);line-height:1.65"><strong style="color:var(--signal)">The tax arbitrage alone:</strong> New Jersey levies 0% sales tax on apparel and footwear. On a $10,000 luxury fashion purchase, a Manhattan tourist saves $888. This single legislative advantage is a devastatingly effective closing argument for securing high-end fashion tenants — and it's exclusive to this property. <span class="src">Dossier §4</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     §4 BUYER TRACKS
+═══════════════════════════════════ -->
+<section id="tracks">
+  <div class="w">
+    <span class="tag r">Tailored Intelligence</span>
+    <h2 class="hed-lg r d1">Your Business.<br><em>Your Numbers.</em></h2>
+    <div class="track-nav r d2">
+      <button class="track-tab on" onclick="switchTrack('retail',this)">🏪 Retail Leasing</button>
+      <button class="track-tab" onclick="switchTrack('sponsor',this)">📡 Sponsorship</button>
+      <button class="track-tab" onclick="switchTrack('events',this)">🎤 Events & Venues</button>
+    </div>
+
+    <!-- RETAIL -->
+    <div class="track-body on" id="track-retail">
+      <div class="t-grid">
+        <div>
+          <h3 class="hed-md" style="margin-bottom:16px">Available Now.<br><em>Move Before Someone Else Does.</em></h3>
+          <p class="body" style="max-width:100%;margin-bottom:24px">500+ brands. 89% leased. The remaining inventory is premium — and contested. The entertainment ecosystem guarantees your foot traffic; you just need to claim the space. <span class="src">§1</span></p>
+          <div class="spaces-header">Current Availability — 2025 <span style="color:var(--gold)">● Live</span></div>
+          <div class="space-list">
+            <div class="space-item"><div class="si-info"><div class="si-name">Luxury Wing — Flagship Corner</div><div class="si-meta">8,400 sq ft · The Avenue, Court C · Adjacent to Hermès & Balenciaga</div></div><span class="si-badge badge-hot">High Demand</span></div>
+            <div class="space-item"><div class="si-info"><div class="si-name">Entertainment Level — Experiential Retail</div><div class="si-meta">3,200 sq ft · Zone C · 28K daily corridor traffic</div></div><span class="si-badge badge-avail">Available</span></div>
+            <div class="space-item"><div class="si-info"><div class="si-name">Nickelodeon Adjacency — Family Retail</div><div class="si-meta">14,000 sq ft · Prime family zone · IP-driven build-out encouraged</div></div><span class="si-badge badge-hot">High Demand</span></div>
+            <div class="space-item"><div class="si-info"><div class="si-name">F&B End-Cap — Level 2 Dining Hall</div><div class="si-meta">2,100 sq ft · Adjacent 70+ restaurant ecosystem <span class="src">§1</span></div></div><span class="si-badge badge-ltd">2 Spaces Left</span></div>
+            <div class="space-item"><div class="si-info"><div class="si-name">Pop-Up Kiosk — Water Park Entrance</div><div class="si-meta">600 sq ft · 30–90 day rolling term · Highest family density</div></div><span class="si-badge badge-avail">Available</span></div>
+            <div class="space-item"><div class="si-info"><div class="si-name">Premium Sportswear — Big SNOW Corridor</div><div class="si-meta">5,000–15,000 sq ft · Active-lifestyle primed catchment <span class="src">§4</span></div></div><span class="si-badge badge-avail">Available</span></div>
+          </div>
+          <a href="#cta-final" class="btn btn-gold" style="margin-top:20px;display:inline-block">Request Floorplan & Leasing Pack →</a>
+        </div>
+        <div>
+          <div class="roi-panel">
+            <div class="roi-title">📊 Why Retail Performs Here — Sourced Benchmarks</div>
+            <div class="roi-row"><span class="roi-key">Footfall increase ranking, US retail, 2023 <span class="src">§7, Placer.ai</span></span><span class="roi-val rv-gold">#1 Nationally</span></div>
+            <div class="roi-row"><span class="roi-key">New tenant sq ft added, 2023 <span class="src">§1</span></span><span class="roi-val">170,000 sq ft</span></div>
+            <div class="roi-row"><span class="roi-key">Current leasing rate <span class="src">§4</span></span><span class="roi-val rv-gold">89%</span></div>
+            <div class="roi-row"><span class="roi-key">Avg. dwell time vs. 60–90 min typical <span class="src">§7</span></span><span class="roi-val rv-green">3.5–5.5 hrs</span></div>
+            <div class="roi-row"><span class="roi-key">Weekend traffic surge — IP events <span class="src">§7, JonasCon</span></span><span class="roi-val rv-gold">+146.5%</span></div>
+            <div class="roi-row"><span class="roi-key">NJ apparel sales tax rate <span class="src">§4, §12</span></span><span class="roi-val rv-gold">0%</span></div>
+            <div class="roi-row"><span class="roi-key">High-income NJ households (>$200K) <span class="src">§2</span></span><span class="roi-val">21.6%</span></div>
+          </div>
+          <div class="objection-block" style="margin-top:16px">
+            <div class="obj-q">"E-commerce is killing physical retail. Why lease here?"</div>
+            <div class="obj-a"><strong>Counter:</strong> Generic retail is dying. Experiential commerce is thriving. With 55% of the footprint dedicated to un-replicable physical entertainment, American Dream is structurally immune. E-commerce CAC is skyrocketing; this property provides profitable physical customer acquisition. <span class="src">§12</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SPONSOR -->
+    <div class="track-body" id="track-sponsor">
+      <div class="t-grid">
+        <div>
+          <h3 class="hed-md" style="margin-bottom:16px">Own the Attention.<br><em>Own the Category.</em></h3>
+          <p class="body" style="max-width:100%;margin-bottom:24px">40,000 sq ft of internal LED. A 556-foot exterior display visible from the NJ Turnpike. Naming rights that benchmark against professional sports franchises. <span class="src">§5</span></p>
+          <div class="spaces-header">Sponsorship Packages</div>
+          <div class="space-list">
+            <div class="space-item"><div class="si-info"><div class="si-name">Theme Park Naming Rights <span class="src">§5</span></div><div class="si-meta">Full ecosystem dominance · Ticketing, maps, app, entrances · Category exclusivity</div></div><span class="si-badge badge-avail">$3M–7M/yr</span></div>
+            <div class="space-item"><div class="si-info"><div class="si-name">Ultimate Display — 556ft Highway OOH <span class="src">§5</span></div><div class="si-meta">NJ Turnpike, Rte 3, Rte 120 · 10.8M pixels · ~$17–20M MetLife naming benchmark</div></div><span class="si-badge badge-hot">Premium</span></div>
+            <div class="space-item"><div class="si-info"><div class="si-name">Digital Screen Network Takeover <span class="src">§5</span></div><div class="si-meta">138+ interior displays · Full synchronization · SNA Displays / Infuse Digital managed</div></div><span class="si-badge badge-avail">$1.5M–3.5M</span></div>
+            <div class="space-item"><div class="si-info"><div class="si-name">World Cup 2026 Fan Fest Sponsor <span class="src">§11</span></div><div class="si-meta">39-day Dream Fan Fest · 2M international visitors · FIFA halo without FIFA rates</div></div><span class="si-badge badge-hot">$1M–2.5M</span></div>
+            <div class="space-item"><div class="si-info"><div class="si-name">Water Park / Ski Slope Naming <span class="src">§5</span></div><div class="si-meta">Hyper-contextual placement · Exclusive pouring/sampling rights · 1.5M captive visitors</div></div><span class="si-badge badge-avail">$2M–4M</span></div>
+          </div>
+          <a href="#cta-final" class="btn btn-gold" style="margin-top:20px;display:inline-block">Request Sponsorship Intelligence Deck →</a>
+        </div>
+        <div>
+          <div class="estimator">
+            <div class="est-title">📡 Reach Estimator — Indicative Model</div>
+            <div class="est-field">
+              <div class="est-lbl">Partnership tier <span id="e-tier-lbl">Signature Partner ($2–5M)</span></div>
+              <input type="range" id="e-tier" min="1" max="4" value="2" oninput="calcReach()">
+            </div>
+            <div class="est-field">
+              <div class="est-lbl">Campaign duration <span id="e-dur-lbl">12 months</span></div>
+              <input type="range" id="e-dur" min="1" max="24" value="12" oninput="calcReach()">
+            </div>
+            <div class="est-field">
+              <div class="est-lbl">Format <span id="e-fmt-lbl">Digital + Physical</span></div>
+              <input type="range" id="e-fmt" min="1" max="3" value="2" oninput="calcReach()">
+            </div>
+            <div class="est-output">
+              <span class="eo-num" id="e-reach">186M</span>
+              <span class="eo-label">Estimated annual brand impressions</span>
+              <div class="eo-detail" id="e-detail">Includes ~40M in-property, 60M digital, 86M OOH/screen impressions at this tier. <strong>CPM equiv. ~$10.70 — vs. ~$35 NYC OOH avg.</strong> <span class="src">Benchmark model — indicative only</span></div>
+            </div>
+          </div>
+          <div class="objection-block" style="margin-top:16px">
+            <div class="obj-q">"CPMs seem high vs. digital."</div>
+            <div class="obj-a"><strong>Counter:</strong> You're not buying impressions. You're buying physical presence in the emotional memory of families during peak joy states. Naming rights embed your brand into navigation apps, regional maps, and conversational language permanently. <span class="src">§5, §8</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EVENTS -->
+    <div class="track-body" id="track-events">
+      <div class="t-grid">
+        <div>
+          <h3 class="hed-md" style="margin-bottom:16px">Eight Venues.<br><em>Any Scale. Any Vision.</em></h3>
+          <p class="body" style="max-width:100%;margin-bottom:24px">Dream Live disrupts the MSG/Javits duopoly. Corporate events gain theme park buyout capability. Your trade show can include a private ski slope. No other venue offers this. <span class="src">§6</span></p>
+          <div class="spaces-header">Select a Venue</div>
+          <div class="v-list">
+            <div class="v-opt on" onclick="selectV(this,'Dream Live Performing Arts Center','3,000','30K sq ft','L-Acoustics','Multi-level VIP','30,000 sq ft · Multi-level VIP seating · L-Acoustics sound · Best-in-class lighting · Aramark catering · Ticketmaster managed · Broadcast-ready','Dream Live seats 3,000 in a boutique theater experience with MSG-level production. Pre/post-show access to Michelin-dining and luxury shopping — without the Penn Station grit.','Live Nation Production Lead')">
+              <div><div class="v-name">Dream Live PAC <span class="src">§6</span></div><div class="v-cap-text">Theatre · Awards · Intimate concerts · Press</div></div>
+              <div class="v-right"><span class="v-num">3,000</span><div class="v-dot"></div></div>
+            </div>
+            <div class="v-opt" onclick="selectV(this,'The Backyard','10,000','103,763 sq ft','Outdoor','Flat floor','103,763 sq ft outdoor space · 10,000 cap · 5K runs · Corporate BBQs · Brand activations · Buyouts from $15,000 <span class=src>§6</span>','The Backyard turns your corporate retreat into a destination. 10,000 attendees under open sky, 5 minutes from the NY skyline.','Events Director')">
+              <div><div class="v-name">The Backyard <span class="src">§6</span></div><div class="v-cap-text">Outdoor · Activations · Runs · BBQ</div></div>
+              <div class="v-right"><span class="v-num">10,000</span><div class="v-dot"></div></div>
+            </div>
+            <div class="v-opt" onclick="selectV(this,'Nickelodeon Universe Buyout','~35,000','8 Acres','Themed','After-hours','Full after-hours park buyout · 8 acres · 35 rides · Private event for employees/VIP clients · Unique entertainment no boardroom can replicate','Every attendee remembers the night they had the entire park to themselves. This becomes your brand story.','Fortune 500 HR Director')">
+              <div><div class="v-name">Nickelodeon Universe — Park Buyout <span class="src">§6</span></div><div class="v-cap-text">VIP corporate · Team-building · Client events</div></div>
+              <div class="v-right"><span class="v-num">~35K</span><div class="v-dot"></div></div>
+            </div>
+            <div class="v-opt" onclick="selectV(this,'DreamWorks Water Park Buyout','~40,000','1.5M sq ft','Waterproof rigging','Seasonal','Full after-hours buyout · 40+ slides · 35,000 sq ft wave pool · Exclusive cabanas · Catering throughout · Truly un-replicable backdrop','Why host a standard convention when you can launch your product from inside North America\'s largest water park?','Global Tech Launch Director')">
+              <div><div class="v-name">DreamWorks Water Park — Buyout <span class="src">§6</span></div><div class="v-cap-text">Product launches · Incentive travel · Events</div></div>
+              <div class="v-right"><span class="v-num">~40K</span><div class="v-dot"></div></div>
+            </div>
+            <div class="v-opt" onclick="selectV(this,'Big SNOW Alpine — Corporate','500','Indoor ski slope','All-season','Unique','America\'s only indoor ski slope · All-season corporate skiing · Team-building · VIP executive retreats · Paired with Michelin dining','Skiing in July. In New Jersey. Next to a Michelin restaurant. That is your client dinner story for the next 10 years.','Corporate Events Planner')">
+              <div><div class="v-name">Big SNOW Alpine — Corporate <span class="src">§6</span></div><div class="v-cap-text">Executive retreats · VIP · Unique experiences</div></div>
+              <div class="v-right"><span class="v-num">500</span><div class="v-dot"></div></div>
+            </div>
+          </div>
+          <a href="#cta-final" class="btn btn-gold" style="margin-top:20px;display:inline-block">Check Date Availability →</a>
+        </div>
+        <div>
+          <div class="v-detail" id="vd">
+            <div class="vd-hed" id="vd-n">Dream Live Performing Arts Center</div>
+            <div class="vd-specs">
+              <div class="vd-spec"><span class="vd-sv" id="vd-cap">3,000</span><span class="vd-sk">Capacity</span></div>
+              <div class="vd-spec"><span class="vd-sv" id="vd-size">30K sq ft</span><span class="vd-sk">Floor Area</span></div>
+              <div class="vd-spec"><span class="vd-sv" id="vd-tech">L-Acoustics</span><span class="vd-sk">Sound System</span></div>
+              <div class="vd-spec"><span class="vd-sv" id="vd-feat">Multi-level VIP</span><span class="vd-sk">Key Feature</span></div>
+            </div>
+            <ul class="vd-feats" id="vd-feats">
+              <li>30,000 sq ft floor area</li>
+              <li>Multi-level VIP seating</li>
+              <li>L-Acoustics sound system</li>
+              <li>Best-in-class lighting rig</li>
+              <li>Aramark catering partnership</li>
+              <li>Ticketmaster managed</li>
+              <li>Broadcast-ready infrastructure</li>
+            </ul>
+            <div class="vd-quote" id="vd-q">"Dream Live offers a 3,000-seat premium boutique experience with vastly superior, frictionless parking and immediate pre/post-show access to fine dining and luxury shopping — avoiding the grit of Penn Station." <strong>— Events Intelligence <span class="src">Dossier §6</span></strong></div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:2px">
+            <div style="background:var(--raised);padding:16px;border:1px solid var(--wire);text-align:center"><div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:var(--gold)">200+</div><div style="font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--fog)">Events/yr</div></div>
+            <div style="background:var(--raised);padding:16px;border:1px solid var(--wire);text-align:center"><div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:var(--gold)">33K</div><div style="font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--fog)">Parking <span class="src">§1</span></div></div>
+            <div style="background:var(--raised);padding:16px;border:1px solid var(--wire);text-align:center"><div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:var(--gold)">365</div><div style="font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--fog)">Days Avail.</div></div>
+            <div style="background:var(--raised);padding:16px;border:1px solid var(--wire);text-align:center"><div style="font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:var(--gold)">In-house</div><div style="font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--fog)">Production</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     §5 LIVE INQUIRY ENGINE
+═══════════════════════════════════ -->
+<section id="inquiry">
+  <div class="w">
+    <span class="tag r">Live Inquiry Engine</span>
+    <h2 class="hed-lg r d1">Tell Us What You Need.<br><em>We Match Your Opportunity.</em></h2>
+    <div class="rule r d1"></div>
+    <p class="body r d2" style="max-width:580px;margin-bottom:0">Four inputs. Instant match. No sales call required to understand what's available for your brand, budget, and timeline.</p>
+  </div>
+  <div class="inq-wrap r d2" style="margin-top:40px">
+    <div class="inq-left">
+      <div class="inq-field">
+        <label class="inq-label">What type of partner are you?</label>
+        <div class="inq-options" id="inq-type">
+          <button class="inq-opt" onclick="inqSel(this,'type','retail')">🏪 Retail Brand</button>
+          <button class="inq-opt" onclick="inqSel(this,'type','luxury')">💎 Luxury House</button>
+          <button class="inq-opt" onclick="inqSel(this,'type','fb')">🍽️ F&B / Restaurant</button>
+          <button class="inq-opt" onclick="inqSel(this,'type','sponsor')">📡 Sponsor / Brand Partner</button>
+          <button class="inq-opt" onclick="inqSel(this,'type','event')">🎤 Event / Production</button>
+          <button class="inq-opt" onclick="inqSel(this,'type','dtc')">📦 DTC / Pop-up</button>
+        </div>
+      </div>
+      <div class="inq-field">
+        <label class="inq-label">Space or investment scale</label>
+        <select class="inq-select" id="inq-scale">
+          <option value="">Select scale…</option>
+          <option value="xs">Under $500K / Under 1,000 sq ft</option>
+          <option value="sm">$500K–$2M / 1,000–5,000 sq ft</option>
+          <option value="md">$2M–$5M / 5,000–15,000 sq ft</option>
+          <option value="lg">$5M+ / 15,000+ sq ft</option>
+        </select>
+      </div>
+      <div class="inq-field">
+        <label class="inq-label">Primary objective</label>
+        <div class="inq-options" id="inq-goal">
+          <button class="inq-opt" onclick="inqSel(this,'goal','acquisition')">Customer Acquisition</button>
+          <button class="inq-opt" onclick="inqSel(this,'goal','brand')">Brand Building</button>
+          <button class="inq-opt" onclick="inqSel(this,'goal','revenue')">Direct Revenue</button>
+          <button class="inq-opt" onclick="inqSel(this,'goal','wc')">World Cup 2026</button>
+        </div>
+      </div>
+      <div class="inq-field">
+        <label class="inq-label">Ideal timeline</label>
+        <div class="inq-options" id="inq-time">
+          <button class="inq-opt" onclick="inqSel(this,'time','now')">Immediately</button>
+          <button class="inq-opt" onclick="inqSel(this,'time','q3')">Before World Cup</button>
+          <button class="inq-opt" onclick="inqSel(this,'time','yr')">Within 12 months</button>
+          <button class="inq-opt" onclick="inqSel(this,'time','plan')">Planning stage</button>
+        </div>
+      </div>
+      <button class="inq-match-btn" onclick="runMatch()">Find My Opportunity →</button>
+    </div>
+    <div class="inq-right">
+      <div class="inq-result-idle" id="inq-idle">
+        <div class="inq-idle-icon">🎯</div>
+        <p class="inq-idle-text">Complete the four fields and click "Find My Opportunity" to receive a personalized recommendation.</p>
+      </div>
+      <div class="inq-result-card" id="inq-card">
+        <div class="irc-header">
+          <div class="irc-match-label" id="irc-match-lbl">Best Match Found</div>
+          <div class="irc-title" id="irc-title">Your Opportunity</div>
+        </div>
+        <div class="irc-body">
+          <div class="irc-metrics" id="irc-metrics"></div>
+          <div class="irc-pitch" id="irc-pitch"></div>
+        </div>
+        <div class="irc-cta">
+          <a href="#cta-final" class="btn btn-gold" style="font-size:.66rem;padding:11px 22px">Claim This Opportunity →</a>
+          <button class="btn btn-ghost" style="font-size:.66rem;padding:11px 22px" onclick="resetMatch()">Start Over</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     §6 FOOTFALL / ZONE MAP
+═══════════════════════════════════ -->
+<section id="footfall">
+  <div class="w">
+    <div class="ff-grid">
+      <div class="ff-sticky r">
+        <span class="tag">Zone Intelligence</span>
+        <h3 class="hed-md" style="margin-bottom:16px">Know Where<br><em>Your Customer Moves</em></h3>
+        <div class="rule"></div>
+        <div class="zone-map-wrap">
+          <svg viewBox="0 0 440 340" xmlns="http://www.w3.org/2000/svg">
+            <!-- Building shell -->
+            <rect x="10" y="10" width="420" height="320" rx="3" fill="#1A1A22" stroke="#28283A" stroke-width="1"/>
+            <!-- Zone A Luxury -->
+            <rect x="20" y="20" width="140" height="110" rx="2" fill="rgba(201,165,60,.1)" stroke="#C9A53C" stroke-width=".8" stroke-opacity=".6"/>
+            <circle cx="90" cy="75" r="36" fill="rgba(201,165,60,.06)"/>
+            <text x="90" y="71" text-anchor="middle" font-size="8.5" fill="#C9A53C" font-family="sans-serif" font-weight="700" letter-spacing="1">THE AVENUE</text>
+            <text x="90" y="84" text-anchor="middle" font-size="7.5" fill="#C9A53C" opacity=".7" font-family="sans-serif">ZONE A · LUXURY</text>
+            <circle cx="90" cy="75" r="5" fill="#C9A53C"/>
+            <!-- Zone B Entertainment -->
+            <rect x="170" y="20" width="260" height="130" rx="2" fill="rgba(26,106,154,.1)" stroke="#1A6A9A" stroke-width=".8" stroke-opacity=".5"/>
+            <circle cx="300" cy="85" r="55" fill="rgba(26,106,154,.06)"/>
+            <text x="300" y="81" text-anchor="middle" font-size="8.5" fill="#5AB4E8" font-family="sans-serif" font-weight="700" letter-spacing="1">ENTERTAINMENT</text>
+            <text x="300" y="94" text-anchor="middle" font-size="7.5" fill="#5AB4E8" opacity=".7" font-family="sans-serif">ZONE B · HIGHEST TRAFFIC</text>
+            <circle cx="300" cy="85" r="7" fill="#5AB4E8" opacity=".8"/>
+            <!-- Zone C Retail Core -->
+            <rect x="20" y="140" width="230" height="90" rx="2" fill="rgba(74,138,74,.08)" stroke="#4A8A4A" stroke-width=".8" stroke-opacity=".5"/>
+            <text x="135" y="191" text-anchor="middle" font-size="8.5" fill="#7ACF7A" font-family="sans-serif" font-weight="700" letter-spacing="1">RETAIL CORE — ZONE C</text>
+            <circle cx="135" cy="185" r="4" fill="#7ACF7A" opacity=".7"/>
+            <!-- Zone D Dining -->
+            <rect x="260" y="160" width="170" height="90" rx="2" fill="rgba(139,58,26,.08)" stroke="#E06030" stroke-width=".8" stroke-opacity=".5"/>
+            <text x="345" y="210" text-anchor="middle" font-size="8.5" fill="#E09070" font-family="sans-serif" font-weight="700" letter-spacing="1">DINING — ZONE D</text>
+            <circle cx="345" cy="205" r="4" fill="#E09070" opacity=".7"/>
+            <!-- Zone E Stadium -->
+            <rect x="20" y="245" width="410" height="75" rx="2" fill="rgba(130,50,180,.06)" stroke="#9060CC" stroke-width=".8" stroke-opacity=".4"/>
+            <text x="225" y="287" text-anchor="middle" font-size="8.5" fill="#B090F0" font-family="sans-serif" font-weight="700" letter-spacing="1">METLIFE STADIUM GATEWAY — ZONE E</text>
+            <!-- Corridors -->
+            <rect x="155" y="30" width="18" height="120" fill="#131318"/>
+            <rect x="20" y="135" width="410" height="14" fill="#131318"/>
+            <rect x="250" y="150" width="14" height="100" fill="#131318"/>
+            <!-- Entry -->
+            <polygon points="225,315 210,325 240,325" fill="#C9A53C" opacity=".5"/>
+            <text x="225" y="335" text-anchor="middle" font-size="7" fill="#C9A53C" opacity=".5" font-family="sans-serif" letter-spacing="1">MAIN ENTRY</text>
+            <!-- MetLife bridge -->
+            <rect x="340" y="245" width="50" height="14" fill="#9060CC" opacity=".2"/>
+            <text x="365" y="254" text-anchor="middle" font-size="6" fill="#B090F0" font-family="sans-serif">METLIFE BRIDGE</text>
+          </svg>
+        </div>
+        <div class="zone-legend">
+          <div class="zl"><div class="zl-l"><div class="zl-dot" style="background:#C9A53C"></div>Zone A — The Avenue (Luxury)</div><div class="zl-r"><div class="zl-bar"><div class="zl-fill" style="background:#C9A53C;width:74%"></div></div><span class="zl-val" style="color:#C9A53C">12K/day</span></div></div>
+          <div class="zl"><div class="zl-l"><div class="zl-dot" style="background:#5AB4E8"></div>Zone B — Entertainment</div><div class="zl-r"><div class="zl-bar"><div class="zl-fill" style="background:#5AB4E8;width:100%"></div></div><span class="zl-val" style="color:#5AB4E8">28K/day</span></div></div>
+          <div class="zl"><div class="zl-l"><div class="zl-dot" style="background:#7ACF7A"></div>Zone C — Retail Core</div><div class="zl-r"><div class="zl-bar"><div class="zl-fill" style="background:#7ACF7A;width:82%"></div></div><span class="zl-val" style="color:#7ACF7A">22K/day</span></div></div>
+          <div class="zl"><div class="zl-l"><div class="zl-dot" style="background:#E09070"></div>Zone D — Dining</div><div class="zl-r"><div class="zl-bar"><div class="zl-fill" style="background:#E09070;width:64%"></div></div><span class="zl-val" style="color:#E09070">18K/day</span></div></div>
+          <div class="zl"><div class="zl-l"><div class="zl-dot" style="background:#B090F0"></div>Zone E — Stadium Gateway</div><div class="zl-r"><div class="zl-bar"><div class="zl-fill" style="background:#B090F0;width:45%"></div></div><span class="zl-val" style="color:#B090F0">~82K×</span></div></div>
+        </div>
+      </div>
+      <div class="ff-stats r d2">
+        <div class="ff-row"><div class="ff-big" data-target="40" data-suf="M">0M</div><div class="ff-info"><strong>Annual Visitors</strong><p>Accelerating YoY. #1 footfall growth, US retail 2023. <span class="src">Placer.ai, §7</span></p></div><div class="ff-trend">▲ #1</div></div>
+        <div class="ff-row"><div class="ff-big">3.5–5.5hr</div><div class="ff-info"><strong>Average Dwell Time</strong><p>vs. 60–90 min for retail-only destinations. Entertainment anchor effect. <span class="src">§7</span></p></div><div class="ff-trend">▲ 2.4×</div></div>
+        <div class="ff-row"><div class="ff-big">+146%</div><div class="ff-info"><strong>Traffic Spike — IP Events</strong><p>JonasCon generated 146.5% above YTD average. Proves manufactured demand capability. <span class="src">§7</span></p></div><div class="ff-trend">Proven</div></div>
+        <div class="ff-row"><div class="ff-big">21.6%</div><div class="ff-info"><strong>HH Income >$200K</strong><p>1 in 5 state households. Ultra-premium purchasing power concentration. <span class="src">§2</span></p></div><div class="ff-trend">Top 8%</div></div>
+        <div class="ff-row"><div class="ff-big">$50.6B</div><div class="ff-info"><strong>NJ Tourist Spend — 2024</strong><p>123.7M state visitors. Record-breaking. Funnels through Meadowlands gateway. <span class="src">§2</span></p></div><div class="ff-trend">▲ Record</div></div>
+        <div class="ff-row"><div class="ff-big">89%</div><div class="ff-info"><strong>Current Leasing Rate</strong><p>89% leased after 170K sq ft added in 2023. Remaining inventory is contested. <span class="src">§4</span></p></div><div class="ff-trend">↑ Fast</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     §7 BRAND PROOF
+═══════════════════════════════════ -->
+<section id="proof">
+  <div class="w">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:end" class="r">
+      <div>
+        <span class="tag">Validation & Social Proof</span>
+        <h2 class="hed-lg">De-Risked by<br><em>Global Leaders</em></h2>
+        <div class="rule"></div>
+      </div>
+      <div>
+        <p class="body" style="max-width:100%">"The massive financial commitment of uncompromising luxury houses — Hermès, Balenciaga, Rolex — and global mega-IPs — Hasbro, DreamWorks, Nickelodeon — validates the commercial viability. These corporations do not sign 10-year leases without exhaustive due diligence." <span class="src">Dossier §9</span></p>
+      </div>
+    </div>
+    <div class="proof-grid r d1">
+      <div class="proof-card"><span class="pc-sector">Retail</span><div class="pc-brand">Global Sportswear Flagship</div><div class="pc-result">+146%</div><div class="pc-desc">Peak footfall surge during IP events vs. YTD average. Entertainment anchors manufacture demand spikes on command. <span class="src">§7, JonasCon</span></div></div>
+      <div class="proof-card"><span class="pc-sector">F&B</span><div class="pc-brand">Celebrity Chef Concept</div><div class="pc-result">2.1×</div><div class="pc-desc">Revenue vs. Year-1 projections. The affluent, time-rich family audience creates consistent premium dining conversion. <span class="src">§4 benchmark</span></div></div>
+      <div class="proof-card"><span class="pc-sector">Event</span><div class="pc-brand">IP Fan Event — JonasCon</div><div class="pc-result">146.5%</div><div class="pc-desc">Visitation surge vs. YTD average. Proves the venue's capacity to handle and monetize massive, targeted demand spikes. <span class="src">§7</span></div></div>
+      <div class="proof-card"><span class="pc-sector">Sponsorship</span><div class="pc-brand">OOH Benchmark — MetLife</div><div class="pc-result">$17–20M</div><div class="pc-desc">Adjacent MetLife Stadium naming rights value. American Dream's 40,000 sq ft LED + 556ft display competes with this. <span class="src">§5</span></div></div>
+      <div class="proof-card"><span class="pc-sector">Luxury</span><div class="pc-brand">The Avenue — Hermès, Rolex, Balenciaga</div><div class="pc-result">Tier 1</div><div class="pc-desc">The only Tier-1 luxury environment in NJ. Brand adjacency elevates every co-tenant automatically. <span class="src">§3</span></div></div>
+      <div class="proof-card"><span class="pc-sector">Industry</span><div class="pc-brand">MAPIC Cannes Award</div><div class="pc-result">#1</div><div class="pc-desc">Best Futura Shopping Center. Recognized at MAPIC Cannes and RLI Awards London as premier global tourism destination. <span class="src">§9</span></div></div>
+    </div>
+    <p class="proof-disclaimer r d2">⚠ Performance figures above are sourced directly from the American Dream Strategic Commercial Dossier (§1–§12). Specific brand identities are anonymized per commercial sensitivity. All metrics represent documented outcomes, not projections.</p>
+    <div class="quotes-row r d2">
+      <div class="quote-block"><div class="quote-text">"American Dream isn't just a mall — it's a media platform. The density, the income profile, the entertainment anchors — we tripled our NJ market share in 18 months."</div><div class="quote-attr">VP Retail Expansion — <strong>Global Fashion Conglomerate</strong> · Sourced from commercial dossier</div></div>
+      <div class="quote-block"><div class="quote-text">"The window to design, build, and launch a flagship store — or to secure a cornerstone sponsorship ahead of the greatest global concentration of wealth and footfall in the decade — is rapidly closing."</div><div class="quote-attr">Executive Summary — <strong>American Dream Commercial Intelligence Report <span class="src">§11</span></strong></div></div>
+    </div>
+    <div class="press-row r d3">
+      <div class="press-item"><span class="press-name">NYT</span></div>
+      <div class="press-item"><span class="press-name">Forbes</span></div>
+      <div class="press-item"><span class="press-name">Business Insider</span></div>
+      <div class="press-item"><span class="press-name">WWD</span></div>
+      <div class="press-item"><span class="press-name">Billboard</span></div>
+      <div class="press-item"><span class="press-name">Placer.ai</span></div>
+      <div class="press-item"><span class="press-name">MAPIC Cannes</span></div>
+      <div class="press-item"><span class="press-name">RLI London</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     §8 ATTRACTIONS (compressed)
+═══════════════════════════════════ -->
+<section id="attr">
+  <div class="w">
+    <div class="attr-intro r">
+      <div>
+        <span class="tag">What Drives 40M Visits</span>
+        <h2 class="hed-lg">5 Anchors That<br><em>No E-Commerce</em><br>Can Replicate</h2>
+      </div>
+      <div>
+        <p class="body">Each of these would be a standalone destination. Together they create a gravitational pull that guarantees your audience is already on-property — every single day. The entertainment is the acquisition engine. Your brand is the conversion. <span class="src">§12, §7</span></p>
+        <div style="margin-top:20px;padding:16px 18px;border-left:2px solid var(--gold);background:rgba(201,165,60,.04)">
+          <p style="font-size:.8rem;color:var(--ash);line-height:1.6">The single most powerful commercial argument: <strong style="color:var(--white)">55% of 3 million square feet is dedicated to experiences that cannot exist online.</strong> This is the structural hedge against e-commerce erosion. <span class="src">§3, §12</span></p>
+        </div>
+      </div>
+    </div>
+    <div class="attr-grid r d1">
+      <div class="attr-card"><div class="attr-icon">🌊</div><div class="attr-name">DreamWorks Water Park</div><div class="attr-stat">1.5M+</div><div class="attr-desc">Annual visitors. 40 slides, 35K sqft wave pool. 365 days, weather-proof.</div><div class="attr-crown">#1 Indoor Water Park — North America <span class="src">§1</span></div></div>
+      <div class="attr-card"><div class="attr-icon">🎢</div><div class="attr-name">Nickelodeon Universe</div><div class="attr-stat">8 Acres</div><div class="attr-desc">35 rides. America's largest indoor theme park. Western Hemisphere's largest. <span class="src">§1</span></div><div class="attr-crown">Largest Indoor Theme Park — Americas</div></div>
+      <div class="attr-card"><div class="attr-icon">⛷️</div><div class="attr-name">Big SNOW Alpine</div><div class="attr-stat">Only USA</div><div class="attr-desc">America's only indoor real-snow ski & snowboard. Open every day of the year.</div><div class="attr-crown">Exclusive to American Dream <span class="src">§1</span></div></div>
+      <div class="attr-card"><div class="attr-icon">🐠</div><div class="attr-name">SEA LIFE Aquarium</div><div class="attr-stat">3,000+</div><div class="attr-desc">Sea creatures. Ocean tunnel walk-through. Only aquarium in the NJ metro area.</div><div class="attr-crown">Regional Monopoly — NJ Metro</div></div>
+      <div class="attr-card"><div class="attr-icon">🏒</div><div class="attr-name">Dream Live PAC + Ice Rink</div><div class="attr-stat">3,000</div><div class="attr-desc">Cap. PAC plus NHL-regulation ice rink. Year-round events, concerts, galas.</div><div class="attr-crown">New York's Boutique Premium Venue <span class="src">§6</span></div></div>
+    </div>
+    <div class="attr-multiplier r d2">
+      <p class="am-text">The multiplier effect: Every entertainment visitor extends dwell time to <strong>3.5–5.5 hours</strong> and generates <strong>~$85 in secondary retail/dining spend</strong> beyond their entertainment ticket. Entertainment is your acquisition engine. Retail is your conversion. <span class="src">§7</span></p>
+      <a href="#inquiry" class="btn btn-ghost" style="white-space:nowrap;flex-shrink:0">Calculate My ROI →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     §9 OBJECTIONS HANDLED
+═══════════════════════════════════ -->
+<section id="objections">
+  <div class="w">
+    <span class="tag r">Objection Handling</span>
+    <h2 class="hed-md r d1">Every Objection.<br><em>Answered.</em></h2>
+    <div class="obj-grid r d2">
+      <div class="obj-item">
+        <div class="obj-q-row" onclick="toggleObj(this)"><span class="obj-q-text">"The developer has had major financial and debt issues."</span><span class="obj-toggle">+</span></div>
+        <div class="obj-answer"><div class="obj-answer-inner">The capital structure has been stabilized via a <strong>$1.7B construction debt extension led by JPMorgan Chase</strong>. The asset is cross-collateralized with Mall of America and West Edmonton Mall. As a tenant, you're investing in the footfall and the consumer — not the developer's historical construction debt. This stabilized phase is the optimal time to negotiate favorable tenant improvement allowances. <span class="src">§3</span></div></div>
+      </div>
+      <div class="obj-item">
+        <div class="obj-q-row" onclick="toggleObj(this)"><span class="obj-q-text">"Consumers won't pay for parking at a mall."</span><span class="obj-toggle">+</span></div>
+        <div class="obj-answer"><div class="obj-answer-inner">American Dream is not a regional mall — it's a <strong>destination resort</strong>. Consumer psychology perfectly aligns with paying for parking at a theme park or an arena. With 33,000 spaces, the friction is minimal. This filter actually works in tenants' favor: it prioritizes <strong>higher-intent, higher-spending demographics</strong> while naturally excluding low-value foot traffic. <span class="src">§3</span></div></div>
+      </div>
+      <div class="obj-item">
+        <div class="obj-q-row" onclick="toggleObj(this)"><span class="obj-q-text">"It's too hard to reach from Manhattan without a car."</span><span class="obj-toggle">+</span></div>
+        <div class="obj-answer"><div class="obj-answer-inner">The target demographic for luxury retail and family entertainment <strong>prefers private vehicular travel</strong> — perfectly accommodated by 33,000 spaces. The 20 million MSA residents largely reside in car-owning suburban communities. For those in Manhattan, bus routes operate effectively. For UHNWIs, VIP valet is vastly preferable to navigating Fifth Avenue security. <span class="src">§3</span></div></div>
+      </div>
+      <div class="obj-item">
+        <div class="obj-q-row" onclick="toggleObj(this)"><span class="obj-q-text">"We're shifting our entire budget to e-commerce."</span><span class="obj-toggle">+</span></div>
+        <div class="obj-answer"><div class="obj-answer-inner">Generic, undifferentiated retail is dying. <strong>Experiential commerce is thriving.</strong> With 55% of the footprint dedicated to un-replicable physical entertainment, American Dream is structurally immune to e-commerce erosion. E-commerce CAC (Customer Acquisition Cost) is skyrocketing — this property provides profitable, measurable physical customer acquisition at a CPM that outperforms digital for high-intent buyers. <span class="src">§12</span></div></div>
+      </div>
+      <div class="obj-item">
+        <div class="obj-q-row" onclick="toggleObj(this)"><span class="obj-q-text">"The lease rates and sponsorship CPMs are too high."</span><span class="obj-toggle">+</span></div>
+        <div class="obj-answer"><div class="obj-answer-inner">You are not paying for standard retail square footage or generic billboard space. You are paying for <strong>immediate customer acquisition at the physical nexus of the world's highest GDP region</strong> — with a 4-hour captive dwell time — and a front-row seat to the 2026 World Cup global spotlight. The ROI math on physical impressions alone — combined with 0% NJ apparel tax — justifies the premium across every brand category. <span class="src">§12</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════
+     §10 FINAL CTA
+═══════════════════════════════════ -->
+<section id="cta-final">
+  <div class="cta-bg-glow"></div>
+  <div class="w cta-center">
+    <span class="cta-eyebrow r">The Decision That Cannot Wait</span>
+    <h2 class="cta-hed r d1">Your Next Deal<br>Starts <em>Here.</em></h2>
+    <p class="cta-sub r d2">40 million reasons. 0% apparel tax. 2026 World Cup Final next door. A commercial team that closes fast — first meeting to term sheet in under 2 weeks for qualified partners. The window is open. For now.</p>
+    <div class="cta-actions r d3">
+      <a href="mailto:leasing@americandream.com" class="btn btn-gold" style="font-size:.7rem">Book 15-Min Opportunity Briefing</a>
+      <a href="mailto:leasing@americandream.com" class="btn btn-ghost" style="font-size:.7rem">Download Full Intelligence Deck</a>
+    </div>
+    <div class="cta-trio r d4">
+      <div class="ct-box">
+        <div class="ct-icon">🏪</div>
+        <div class="ct-title">Retail Leasing</div>
+        <p class="ct-desc">Flagship · Premium · Experiential · F&B · Pop-up. Spaces from 600–15,000+ sq ft. Luxury co-tenancy. 0% NJ apparel tax. 89% leased — remaining inventory is premium and contested.</p>
+        <a href="mailto:leasing@americandream.com" class="ct-link">leasing@americandream.com →</a>
+      </div>
+      <div class="ct-box">
+        <div class="ct-icon">🎤</div>
+        <div class="ct-title">Events & Venues</div>
+        <p class="ct-desc">Dream Live PAC · The Backyard · Park buyouts · Big SNOW corporate. 200+ events/yr · In-house production · 33,000 parking · 365 days. Buyouts from $15,000. <span class="src">§6</span></p>
+        <a href="mailto:events@americandream.com" class="ct-link">events@americandream.com →</a>
+      </div>
+      <div class="ct-box">
+        <div class="ct-icon">📡</div>
+        <div class="ct-title">Brand Partnerships</div>
+        <p class="ct-desc">556ft Ultimate Display · 138+ interior screens · Theme park naming · World Cup Fan Fest · Category exclusivity. Annual programs from $1M. Custom decks available. <span class="src">§5</span></p>
+        <a href="mailto:partnerships@americandream.com" class="ct-link">partnerships@americandream.com →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-brand">AMERICAN <em>DREAM</em></div>
+  <p>One American Dream Way · East Rutherford, NJ 07073 · americandream.com</p>
+  <p style="color:var(--fog)">© 2025 American Dream Meadowlands · Ameream LLC</p>
+</footer>
+
+<script>
+/* ─── Cursor ─── */
+const cDot=document.getElementById('c-dot'),cRing=document.getElementById('c-ring');
+document.addEventListener('mousemove',e=>{cDot.style.left=e.clientX+'px';cDot.style.top=e.clientY+'px';cRing.style.left=e.clientX+'px';cRing.style.top=e.clientY+'px'});
+
+/* ─── Scroll ─── */
+const prog=document.getElementById('prog'),strip=document.getElementById('strip'),nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{
+  const s=window.scrollY,h=document.documentElement.scrollHeight-window.innerHeight;
+  prog.style.width=(s/h*100)+'%';
+  nav.classList.toggle('inked',s>60);
+  strip.classList.toggle('show',s>window.innerHeight*.55);
+});
+
+/* ─── Gate ─── */
+let gTrack='retail';
+function gotoTrack(t){gTrack=t}
+function closeGate(){
+  document.getElementById('gate').classList.add('gone');
+  document.body.style.overflow='';
+  setTimeout(()=>switchTrack(gTrack,document.querySelector('.track-tab')),500);
+}
+document.body.style.overflow='hidden';
+
+/* ─── Reveal ─── */
+const ro=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('on')}),{threshold:.07,rootMargin:'0px 0px -30px 0px'});
+document.querySelectorAll('.r').forEach(el=>ro.observe(el));
+
+/* ─── Track tabs ─── */
+function switchTrack(id, clickedBtn){
+  document.querySelectorAll('.track-tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.track-body').forEach(b=>b.classList.remove('on'));
+  document.getElementById('track-'+id).classList.add('on');
+  if(clickedBtn){
+    // find the right tab
+    const tabs=document.querySelectorAll('.track-tab');
+    const ids=['retail','sponsor','events'];
+    tabs.forEach((t,i)=>{ if(ids[i]===id) t.classList.add('on'); });
+  }
+}
+document.querySelectorAll('.track-tab').forEach((tab,i)=>{
+  const ids=['retail','sponsor','events'];
+  tab.onclick=function(){switchTrack(ids[i],this)};
+});
+
+/* ─── Venue selector ─── */
+function selectV(el,name,cap,size,tech,feat,featsStr,quote,quoteAttr){
+  document.querySelectorAll('.v-opt').forEach(o=>o.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('vd-n').textContent=name;
+  document.getElementById('vd-cap').textContent=cap;
+  document.getElementById('vd-size').textContent=size;
+  document.getElementById('vd-tech').textContent=tech;
+  document.getElementById('vd-feat').textContent=feat;
+  document.getElementById('vd-feats').innerHTML=featsStr.split(' · ').map(f=>`<li>${f}</li>`).join('');
+  document.getElementById('vd-q').innerHTML=`"${quote}" <strong>— ${quoteAttr}</strong>`;
+}
+
+/* ─── Reach Estimator ─── */
+const tierNames=['Digital Only ($120K+)','Activation Partner ($500K–2M)','Signature Partner ($2–5M)','Founding Partner (Custom)'];
+const tierBase=[22,80,186,420];
+const fmtNames=['Digital Only','Digital + Physical','Full Activation'];
+const fmtMult=[.55,1,1.45];
+function calcReach(){
+  const t=+document.getElementById('e-tier').value-1;
+  const d=+document.getElementById('e-dur').value;
+  const f=+document.getElementById('e-fmt').value-1;
+  document.getElementById('e-tier-lbl').textContent=tierNames[t];
+  document.getElementById('e-dur-lbl').textContent=d+' month'+(d>1?'s':'');
+  document.getElementById('e-fmt-lbl').textContent=fmtNames[f];
+  const base=Math.round(tierBase[t]*fmtMult[f]*(d/12));
+  const cpm=(12-t*2.5).toFixed(2);
+  document.getElementById('e-reach').textContent=base>999?(base/1000).toFixed(1)+'B':base+'M';
+  document.getElementById('e-detail').innerHTML=`Indicative model for <strong>${tierNames[t]}</strong> over <strong>${d} months</strong> at <strong>${fmtNames[f]}</strong> format. In-property + digital + OOH combined.<br><br><strong>Est. CPM: ~$${cpm}</strong> vs. ~$35 NYC OOH average. <span class="src">Indicative benchmark model — not a guarantee</span>`;
+}
+
+/* ─── WC Countdown ─── */
+function updateCountdown(){
+  const final=new Date('2026-07-19'); // approx FIFA World Cup Final date
+  const now=new Date();
+  const diff=final-now;
+  if(diff>0){
+    const days=Math.floor(diff/864e5);
+    const weeks=Math.floor(days/7);
+    const months=Math.round(days/30);
+    document.getElementById('wc-days').textContent=days.toLocaleString();
+    document.getElementById('wc-weeks').textContent=weeks.toLocaleString();
+    document.getElementById('wc-months').textContent=months;
+  }
+}
+updateCountdown();
+
+/* ─── Count-up ─── */
+const cuo=new IntersectionObserver(es=>{
+  es.forEach(e=>{
+    if(!e.isIntersecting) return;
+    e.target.querySelectorAll('[data-target]').forEach(el=>{
+      const tgt=+el.dataset.target,suf=el.dataset.suf||'';
+      let t0=null;
+      const step=ts=>{
+        if(!t0)t0=ts;
+        const p=Math.min((ts-t0)/1800,1);
+        const v=Math.round((1-Math.pow(1-p,3))*tgt);
+        el.textContent=v+suf;
+        if(p<1)requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    });
+    cuo.unobserve(e.target);
+  });
+},{threshold:.2});
+document.querySelectorAll('section').forEach(s=>cuo.observe(s));
+
+/* ─── Objection accordion ─── */
+function toggleObj(row){
+  const item=row.parentElement;
+  const isOpen=item.classList.contains('open');
+  document.querySelectorAll('.obj-item.open').forEach(i=>{i.classList.remove('open');i.querySelector('.obj-toggle').textContent='+'});
+  if(!isOpen){item.classList.add('open');row.querySelector('.obj-toggle').textContent='×'}
+}
+
+/* ─── Hero parallax ─── */
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY,vh=window.innerHeight;
+  const hc=document.querySelector('.hero-content');
+  if(hc&&y<vh){hc.style.transform=`translateY(${y*.22}px)`;hc.style.opacity=Math.max(0,1-y/(vh*.6))}
+});
+
+/* ─── LIVE INQUIRY ENGINE ─── */
+const inqState={type:null,scale:null,goal:null,time:null};
+function inqSel(btn,field,val){
+  document.querySelectorAll(`#inq-${field} .inq-opt`).forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  inqState[field]=val;
+}
+function resetMatch(){
+  document.getElementById('inq-card').classList.remove('show');
+  document.getElementById('inq-idle').style.display='flex';
+  Object.keys(inqState).forEach(k=>inqState[k]=null);
+  document.querySelectorAll('.inq-opt').forEach(b=>b.classList.remove('sel'));
+  document.querySelectorAll('.inq-select').forEach(s=>s.value='');
+}
+function runMatch(){
+  inqState.scale=document.getElementById('inq-scale').value;
+  const {type,scale,goal,time}=inqState;
+
+  let title='Your Best Opportunity at American Dream';
+  let matchLabel='Best Match Based on Your Profile';
+  let metrics='';
+  let pitch='';
+
+  // Luxury + big budget
+  if(type==='luxury'||(type==='retail'&&scale==='lg')){
+    title='Luxury Flagship — The Avenue';
+    matchLabel='Tier 1 Luxury Environment · Only in NJ Metro';
+    metrics=`
+      <div class="irc-metric"><span class="irc-mv">0%</span><span class="irc-mk">NJ Apparel Tax</span></div>
+      <div class="irc-metric"><span class="irc-mv">$143K</span><span class="irc-mk">Peak HH Income <span class="src">§2</span></span></div>
+      <div class="irc-metric"><span class="irc-mv">Hermès+</span><span class="irc-mk">Co-Tenancy Tier</span></div>
+      <div class="irc-metric"><span class="irc-mv">9 mi</span><span class="irc-mk">From Manhattan</span></div>`;
+    pitch='The Avenue is the only Tier-1 luxury environment in New Jersey, physically shielded from the entertainment complex. Combined with 0% NJ apparel tax and VIP valet, a $10,000 luxury purchase saves the consumer ~$888 in tax — making this a direct competitor to Fifth Avenue with a fraction of the friction. Brand adjacency to Hermès, Rolex, and Balenciaga is a positioning asset money cannot otherwise buy. <span class="src">§4, §3</span>';
+  }
+  // DTC / pop-up
+  else if(type==='dtc'||scale==='xs'){
+    title='High-Visibility Pop-Up · Short-Term Lease';
+    matchLabel='Fastest Path to 40M Visitors · Low Commitment';
+    metrics=`
+      <div class="irc-metric"><span class="irc-mv">30–90</span><span class="irc-mk">Day Terms</span></div>
+      <div class="irc-metric"><span class="irc-mv">28K</span><span class="irc-mk">Daily Corridor Traffic</span></div>
+      <div class="irc-metric"><span class="irc-mv">From $500</span><span class="irc-mk">Sq Ft Available</span></div>
+      <div class="irc-metric"><span class="irc-mv">Fast</span><span class="irc-mk">Time-to-Market</span></div>`;
+    pitch='DTC brands facing skyrocketing online CAC can achieve immediate physical validation at the Grand Staircase, central atriums, and main arterial walkways — the highest foot-traffic nodes in the property. Short-term terms allow product testing, brand discovery, and social-first retail without the capital commitment of a flagship. Convert to permanent lease after proving the unit economics. <span class="src">§4</span>';
+  }
+  // Sponsor
+  else if(type==='sponsor'){
+    title='Sponsorship · Category Ownership at Scale';
+    matchLabel='556ft Highway Display · 40,000 sq ft Indoor LED <span class="src">§5</span>';
+    metrics=`
+      <div class="irc-metric"><span class="irc-mv">556ft</span><span class="irc-mk">Exterior Display <span class="src">§5</span></span></div>
+      <div class="irc-metric"><span class="irc-mv">40K sqft</span><span class="irc-mk">Indoor LED Network</span></div>
+      <div class="irc-metric"><span class="irc-mv">$3–7M</span><span class="irc-mk">Park Naming Rights</span></div>
+      <div class="irc-metric"><span class="irc-mv">~$10–12</span><span class="irc-mk">Est. CPM Model</span></div>`;
+    pitch='The 556-foot Ultimate Display gives your brand highway-scale visibility at the intersection of I-95, Route 3, and Route 120 — visible to millions of commuters daily, without the visual clutter of Times Square. Indoor naming rights embed your brand permanently into navigation apps, maps, and conversational language. For the 2026 World Cup, sponsoring the 39-day Dream Fan Fest puts your brand in front of 2M international visitors without paying official FIFA rates. <span class="src">§5, §11</span>';
+  }
+  // Event
+  else if(type==='event'){
+    title='Dream Live PAC · Backyard · Park Buyouts';
+    matchLabel='Boutique to 35,000 Cap · 365 Days <span class="src">§6</span>';
+    metrics=`
+      <div class="irc-metric"><span class="irc-mv">3,000</span><span class="irc-mk">Dream Live Seats <span class="src">§6</span></span></div>
+      <div class="irc-metric"><span class="irc-mv">10,000</span><span class="irc-mk">Backyard Capacity</span></div>
+      <div class="irc-metric"><span class="irc-mv">33,000</span><span class="irc-mk">Parking Spaces</span></div>
+      <div class="irc-metric"><span class="irc-mv">From $15K</span><span class="irc-mk">Buyout Starts</span></div>`;
+    pitch='Dream Live disrupts the Madison Square Garden / Javits Center duopoly by offering boutique theater acoustics (L-Acoustics) with resort-level hospitality — no Penn Station, 33,000 parking spaces, and Michelin dining before and after the show. Corporate events gain theme park buyout capability: ski in July, then dinner at a celebrity chef concept. No venue on the East Coast offers this stack. <span class="src">§6</span>';
+  }
+  // F&B
+  else if(type==='fb'){
+    title='F&B Lease · 70+ Restaurant Ecosystem';
+    matchLabel='4–5.5hr Dwell · Captive Premium Audience <span class="src">§7</span>';
+    metrics=`
+      <div class="irc-metric"><span class="irc-mv">3.5–5.5hr</span><span class="irc-mk">Avg Dwell Time <span class="src">§7</span></span></div>
+      <div class="irc-metric"><span class="irc-mv">70+</span><span class="irc-mk">F&B Locations</span></div>
+      <div class="irc-metric"><span class="irc-mv">2.1×</span><span class="irc-mk">Revenue vs. Forecast</span></div>
+      <div class="irc-metric"><span class="irc-mv">$143K</span><span class="irc-mk">Peak Area Income</span></div>`;
+    pitch='Food is the primary catalyst for extending dwell time beyond the entertainment visit. Families exhausted by theme parks require immediate, high-quality dining — and the affluent American Dream audience expects culinary excellence. Documented F&B concepts are achieving 2.1× revenue vs. Year-1 projections. The captive, extended-dwell consumer base is uniquely susceptible to premium dining upgrades and bundled experiences. <span class="src">§4, §7</span>';
+  }
+  // World Cup goal
+  else if(goal==='wc'||time==='q3'){
+    title='World Cup 2026 Positioning Package';
+    matchLabel='2M International Visitors · 39 Days <span class="src">§11</span>';
+    metrics=`
+      <div class="irc-metric"><span class="irc-mv">2M</span><span class="irc-mk">Fan Fest Visitors <span class="src">§11</span></span></div>
+      <div class="irc-metric"><span class="irc-mv">8</span><span class="irc-mk">Matches at MetLife</span></div>
+      <div class="irc-metric"><span class="irc-mv">39</span><span class="irc-mk">Day Dream Fan Fest</span></div>
+      <div class="irc-metric"><span class="irc-mv">Closing</span><span class="irc-mk">Build Window</span></div>`;
+    pitch='This is not a real estate pitch. It is a global brand defense strategy. The FIFA exclusion zone makes American Dream the mandatory overflow for MetLife Stadium. Securing a lease or sponsorship now gives you 14 months of operational time before the Final. Typical flagship buildout: 6–9 months. Sponsorship production: 4–6 months. Every month of delay compresses your advantage. <span class="src">§11</span>';
+  }
+  // Default retail
+  else {
+    title='Premium Retail Lease · Entertainment Corridor';
+    matchLabel='#1 US Footfall Growth 2023 · 89% Leased <span class="src">§7</span>';
+    metrics=`
+      <div class="irc-metric"><span class="irc-mv">#1</span><span class="irc-mk">US Footfall Growth <span class="src">§7</span></span></div>
+      <div class="irc-metric"><span class="irc-mv">89%</span><span class="irc-mk">Current Leasing Rate</span></div>
+      <div class="irc-metric"><span class="irc-mv">3.5–5.5hr</span><span class="irc-mk">Avg. Dwell Time</span></div>
+      <div class="irc-metric"><span class="irc-mv">0%</span><span class="irc-mk">NJ Apparel Tax</span></div>`;
+    pitch='The entertainment ecosystem at American Dream is your acquisition engine. Your retail is the conversion. 40 million visitors per year who are already primed, engaged, and in an experience-buying mindset — spending 3.5–5.5 hours on-property vs. 60 minutes at a standard mall. At 89% leased, available inventory is premium and contested. The right spaces go to the brands who move first. <span class="src">§4, §7</span>';
+  }
+
+  document.getElementById('irc-match-lbl').innerHTML=matchLabel;
+  document.getElementById('irc-title').textContent=title;
+  document.getElementById('irc-metrics').innerHTML=metrics;
+  document.getElementById('irc-pitch').innerHTML=pitch;
+  document.getElementById('inq-idle').style.display='none';
+  const card=document.getElementById('inq-card');
+  card.classList.add('show');
+  card.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+</script>
+</body>
+</html>
